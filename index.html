@@ -1847,18 +1847,29 @@
                 const warning = document.getElementById('desktopWarning');
                 if (!warning) return;
 
+                // Reset state
+                warning.style.display = 'none';
+                warning.classList.remove('fade-out');
+
                 if (window.innerWidth <= 768) {
+                    // Show it first
                     warning.style.display = 'block';
 
-                // 👇 Hide after 2.5 seconds (2500 ms)
-                setTimeout(() => {
-                    warning.style.display = 'none';
-                }, 2500);
-                } else {
-                    warning.style.display = 'none';
-                }
+                    // Trigger fade out after 2s
+                    setTimeout(() => {
+                        warning.classList.add('fade-out');
+                    }, 2000);
+
+                    // Fully hide after fade (2s fade + 0.5s delay)
+                    setTimeout(() => {
+                     warning.style.display = 'none';
+                        warning.classList.remove('fade-out');
+                 }, 2500);
+             }
             }
 
+            checkDeviceMode();
+            window.addEventListener('resize', checkDeviceMode);
 
 
             // Event listeners
@@ -2097,4 +2108,3 @@
     </script>
 </body>
 </html>
-
