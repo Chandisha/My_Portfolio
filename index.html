@@ -1846,6 +1846,19 @@
             setTimeout(typeWriter, 1500);
             setTimeout(animateStats, 800);
             
+            // Desktop mode popup
+            function checkDeviceMode() {
+                const warning = document.getElementById('desktopWarning');
+                if (window.innerWidth < 768) {
+                    warning.style.display = 'block';
+                } else {
+                    warning.style.display = 'none';
+                }   
+            }
+            checkDeviceMode();
+            window.addEventListener('resize', checkDeviceMode);
+
+
             // Event listeners
             window.addEventListener('scroll', () => {
                 updateScrollProgress();
@@ -2079,39 +2092,6 @@
             }
         }
 
-        // Initialize mobile optimizations
-        optimizeForMobile();
-        window.addEventListener('resize', optimizeForMobile);
-
-        // Add error handling for missing elements
-        function safeQuerySelector(selector, callback) {
-            const element = document.querySelector(selector);
-            if (element && typeof callback === 'function') {
-                callback(element);
-            }
-        }
-
-        // Graceful degradation for older browsers
-        if (!window.IntersectionObserver) {
-            document.querySelectorAll('.project-card, .timeline-content, .skill-category').forEach(el => {
-                el.style.opacity = '1';
-                el.style.transform = 'translateY(0)';
-            });
-        }
-
-    function checkDeviceMode() {
-    const warning = document.getElementById('desktopWarning');
-    if (window.innerWidth < 768) {
-        warning.style.display = 'block';
-    } else {
-        warning.style.display = 'none';
-    }
-}
-
-// Run on page load and resize
-window.addEventListener('load', checkDeviceMode);
-window.addEventListener('resize', checkDeviceMode);
     </script>
 </body>
 </html>
-
