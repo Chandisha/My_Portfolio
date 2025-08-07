@@ -1845,14 +1845,20 @@
             // Desktop mode popup
             function checkDeviceMode() {
                 const warning = document.getElementById('desktopWarning');
-                if (window.innerWidth < 768) {
+                if (!warning) return;
+
+                if (window.innerWidth <= 768) {
                     warning.style.display = 'block';
+
+                // 👇 Hide after 2.5 seconds (2000 ms)
+                setTimeout(() => {
+                    warning.style.display = 'none';
+                }, 2000);
                 } else {
                     warning.style.display = 'none';
-                }   
+                }
             }
-            checkDeviceMode();
-            window.addEventListener('resize', checkDeviceMode);
+
 
 
             // Event listeners
