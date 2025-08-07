@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chandisha Das - AI/ML Engineer</title>
+    <title>Chandisha Das - CS Engineer</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -1258,6 +1258,12 @@
         </div>
     </nav>
 
+
+    <div class="desktop-warning" id="desktopWarning">
+        <p>👋 Hey there! For the best experience, please open this page in <strong>Desktop Mode</strong>.</p>
+    </div>
+
+
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-container">
@@ -1347,6 +1353,35 @@
     background: rgba(255, 255, 255, 0.02);
     position: relative;
 }
+
+/* Desktop Mode Warning Popup */
+.desktop-warning {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #64ffda;
+    font-weight: 500;
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 70px auto 0 auto;
+    box-shadow: 0 4px 15px rgba(100, 255, 218, 0.2);
+    position: relative;
+    z-index: 999;
+    display: none;
+    animation: slideDown 0.5s ease forwards;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 </style>
 
     <!-- Experience Section -->
@@ -1558,8 +1593,8 @@
                 </div>
 
                 <div class="contact-form-section">
-                    <h3>Interested in collaborating on innovative AI/ML projects or exploring creative ideas in web development?</h3>
-                    <p><p>Let's connect and build something impactful together — blending smart algorithms with thoughtful design to create real-world solutions.</p></p>
+                    <h3 style="font-size: 1.2rem;">Interested in collaborating on innovative AI/ML projects or exploring creative ideas in web development?</h3>
+                    <p><p>Let's connect and build something impactful together</p></p>
                     
                     <div class="availability-badge">
                         <div class="availability-dot"></div>
@@ -1569,7 +1604,6 @@
                     <p style="margin-top: 20px; color: #64ffda; font-weight: 600; font-size: 0.95rem;">
                         🔬 Research Collaborations<br>
                         💼 Full-time Opportunities<br>
-                        🤝 Project Partnerships<br>
                         📚 Academic Discussions
                     </p>
                 </div>
@@ -2064,6 +2098,19 @@
                 el.style.transform = 'translateY(0)';
             });
         }
+
+    function checkDeviceMode() {
+    const warning = document.getElementById('desktopWarning');
+    if (window.innerWidth < 768) {
+        warning.style.display = 'block';
+    } else {
+        warning.style.display = 'none';
+    }
+}
+
+// Run on page load and resize
+window.addEventListener('load', checkDeviceMode);
+window.addEventListener('resize', checkDeviceMode);
     </script>
 </body>
 </html>
