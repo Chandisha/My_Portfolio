@@ -360,63 +360,62 @@
         }
 
         .profile-image {
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    background: #fff;
-}
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            background: #fff;
+        }
 
-.profile-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 15px;
-}
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
 
-.profile-image::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, rgba(100, 255, 218, 0.1), transparent 70%);
-    animation: pulse 3s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 1;
-}
+        .profile-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(100, 255, 218, 0.1), transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
 
-@keyframes pulse {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.7; }
-}
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
 
-/* ✅ Hover message overlay */
-.profile-image .hover-text {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.7);
-    color: #64ffda;
-    font-size: 1rem;
-    text-align: center;
-    padding: 10px;
-    opacity: 0;
-    transform: translateY(100%);
-    transition: all 0.4s ease;
-    z-index: 2;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-}
+        .profile-image .hover-text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: #64ffda;
+            font-size: 1rem;
+            text-align: center;
+            padding: 10px;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.4s ease;
+            z-index: 2;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
 
-.profile-image:hover .hover-text {
-    opacity: 1;
-    transform: translateY(0);
-}
+        .profile-image:hover .hover-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         /* About Section */
         .about {
@@ -963,7 +962,7 @@
 
         .contact-form-section {
             background: rgba(255, 255, 255, 0.05);
-            padding:  20px 30px;
+            padding: 20px 30px;
             border-radius: 20px;
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1078,8 +1077,266 @@
             }
         }
 
-        /* Responsive Design */
+        /* FIXED CHATBOT STYLES */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 10000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+            position: relative;
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(100, 255, 218, 0.4);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .chatbot-popup {
+            position: absolute;
+            bottom: 75px;
+            right: 0;
+            width: 400px;
+            height: 600px;
+            background: rgba(10, 10, 10, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+            transform-origin: bottom right;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .chatbot-popup.active {
+            display: flex;
+        }
+        
+        .chatbot-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+            color: #000000;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: #000000;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .chatbot-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: rgba(15, 15, 15, 0.95);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message.bot {
+            background: rgba(100, 255, 218, 0.15);
+            color: #64ffda;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+            color: #000000;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .typing-indicator {
+            display: none;
+            background: rgba(100, 255, 218, 0.15);
+            color: #64ffda;
+            padding: 12px 16px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            max-width: 80px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            background: #64ffda;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            border-top: 1px solid rgba(100, 255, 218, 0.2);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            color: #ffffff;
+            padding: 12px 16px;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: #64ffda;
+            box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.1);
+        }
+
+        .chat-input::placeholder {
+            color: #888;
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+            border: none;
+            color: #000000;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .send-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+        
+        .chatbot-status {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(100, 255, 218, 0.2);
+            color: #64ffda;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        /* Mobile responsiveness */
         @media (max-width: 768px) {
+            .chatbot-popup {
+                width: 350px;
+                height: 500px;
+                bottom: 75px;
+                right: -10px;
+            }
+            
+            .chatbot-widget {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .chatbot-toggle {
+                width: 55px;
+                height: 55px;
+                font-size: 22px;
+            }
+
             .hero-container {
                 grid-template-columns: 1fr;
                 text-align: center;
@@ -1153,6 +1410,61 @@
                 justify-content: center;
             }
         }
+        
+        /* Light mode compatibility */
+        body.light-mode .chatbot-popup {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        body.light-mode .chatbot-content {
+            background: rgba(250, 250, 250, 0.95);
+        }
+
+        body.light-mode .chat-input {
+            background: rgba(0, 0, 0, 0.05);
+            color: #333;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        body.light-mode .chat-input::placeholder {
+            color: #666;
+        }
+
+        body.light-mode .message.bot {
+            background: rgba(0, 102, 204, 0.15);
+            color: #0066cc;
+        }
+        
+        body.light-mode .chatbot-status {
+            background: rgba(0, 0, 0, 0.05);
+            color: #0066cc;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Notification badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background: #ff4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-3px); }
+            60% { transform: translateY(-2px); }
+        }
 
         /* Loading Animation */
         .loading-overlay {
@@ -1197,205 +1509,35 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Floating Professional Icons Animation */
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
-            }
+        /* Education Section Styles */
+        .education {
+            padding: 100px 0;
+            background: rgba(255, 255, 255, 0.02);
+            position: relative;
         }
 
-        /* Ripple Effect */
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
+        /* Desktop Mode Warning Popup */
+        .desktop-warning {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ff3b3b;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-size: 0.9rem;
+            z-index: 9999;
+            animation: fadeIn 0.4s ease;
+            text-align: center;
         }
 
-    <!-- Add this CSS to your existing portfolio HTML (inside <style> section) -->
-
-    /* Chatbot Widget Styles */
-    .chatbot-widget {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 10000;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .chatbot-toggle {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
-        transition: all 0.3s ease;
-        animation: pulse 2s infinite;
-    }
-
-    .chatbot-toggle:hover {
-        transform: scale(1.1);
-        box-shadow: 0 12px 35px rgba(100, 255, 218, 0.4);
-    }
-
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
-    }
-
-    .chatbot-popup {
-        position: absolute;
-        bottom: 70px;
-        right: 0;
-        width: 400px;
-        height: 600px;
-        background: rgba(10, 10, 10, 0.95);
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(100, 255, 218, 0.2);
-        display: none;
-        flex-direction: column;
-        overflow: hidden;
-        animation: slideUp 0.3s ease;
-    }
-    
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px) scale(0.9);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px) translateX(-50%); }
+            to { opacity: 1; transform: translateY(0) translateX(-50%); }
         }
-        to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-    }
-    
-    .chatbot-popup.active {
-        display: flex;
-    }
-    
-    .chatbot-header {
-        padding: 20px;
-        background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
-        color: #000000;
-        font-weight: 600;
-        display: flex;
-        justify-content: space-between;
-    align-items: center;
-    }
-    
-    .chatbot-close {
-        background: none;
-        border: none;
-        color: #000000;
-        font-size: 20px;
-        cursor: pointer;
-        padding: 0;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-    }
-    
-    .chatbot-close:hover {
-        background: rgba(0, 0, 0, 0.1);
-        transform: rotate(90deg);
-    }
-    
-    .chatbot-iframe {
-        flex: 1;
-        border: none;
-        background: transparent;
-    }
-    
-    .chatbot-status {
-        padding: 10px 20px;
-        background: rgba(255, 255, 255, 0.05);
-        border-top: 1px solid rgba(100, 255, 218, 0.2);
-        color: #64ffda;
-        font-size: 12px;
-        text-align: center;
-    }
-        
-        /* Mobile responsiveness */
-    @media (max-width: 768px) {
-        .chatbot-popup {
-            width: 350px;
-            height: 500px;
-            bottom: 70px;
-            right: -25px;
-        }
-        
-        .chatbot-widget {
-            bottom: 15px;
-            right: 15px;
-        }
-        
-        .chatbot-toggle {
-            width: 50px;
-            height: 50px;
-            font-size: 20px;
-        }
-    }
-    
-    /* Light mode compatibility */
-    body.light-mode .chatbot-popup {
-        background: rgba(255, 255, 255, 0.95);
-        border: 1px solid rgba(0, 0, 0, 0.2);
-}
-    
-    body.light-mode .chatbot-status {
-        background: rgba(0, 0, 0, 0.05);
-        color: #0066cc;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Notification badge */
-    .notification-badge {
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        width: 20px;
-        height: 20px;
-        background: #ff4444;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 10px;
-        font-weight: bold;
-        color: white;
-        animation: bounce 1s infinite;
-    }
-
-    @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-        40% { transform: translateY(-3px); }
-        60% { transform: translateY(-2px); }
-    }
-    
     </style>
 </head>
 <body>
@@ -1432,11 +1574,9 @@
         </div>
     </nav>
 
-
     <div class="desktop-warning" id="desktopWarning">
         <p>👋 Hey there! For the best experience, please open this page in <strong>Desktop Mode</strong>.</p>
     </div>
-
 
     <!-- Hero Section -->
     <section id="home" class="hero">
@@ -1452,11 +1592,10 @@
             </div>
             <div class="hero-image">
                 <div class="image-container">
-                    <div class="profile-image hover-message">
+                    <div class="profile-image">
                         <img src="assets/image.jpg" alt="Chandisha Das" />
                         <div class="hover-text">Hi! You have found Me</div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -1495,64 +1634,28 @@
         </div>
     </section>
 
-
-
-<!-- Education Section -->
-<section id="education" class="education">
-    <div class="container">
-        <h2 class="section-title">Education</h2>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-date">Future Institute of Technology, Rajpur, Sonarpur, India</div>
-                    <div class="timeline-title">Bachelor of Technology in Computer Science and Engineering</div>
-                    <div class="timeline-company">August 2022 – June 2026</div>
+    <!-- Education Section -->
+    <section id="education" class="education">
+        <div class="container">
+            <h2 class="section-title">Education</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Future Institute of Technology, Rajpur, Sonarpur, India</div>
+                        <div class="timeline-title">Bachelor of Technology in Computer Science and Engineering</div>
+                        <div class="timeline-company">August 2022 – June 2026</div>
+                    </div>
                 </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-date">Nava Nalanda High School, Golpark, India</div>
-                    <div class="timeline-title">Higher Secondary Education</div>
-                    <div class="timeline-company">June 2019 – February 2021</div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Nava Nalanda High School, Golpark, India</div>
+                        <div class="timeline-title">Higher Secondary Education</div>
+                        <div class="timeline-company">June 2019 – February 2021</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-<style>
-/* Education Section Styles */
-.education {
-    padding: 100px 0;
-    background: rgba(255, 255, 255, 0.02);
-    position: relative;
-}
-
-/* Desktop Mode Warning Popup */
-.desktop-warning {
-    display: none;
-    position: fixed;
-    top: 60px; /* adjust based on navbar */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #ff3b3b;
-    color: white;
-    padding: 10px 18px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    font-size: 0.9rem;
-    z-index: 9999;
-    animation: fadeIn 0.4s ease;
-    text-align: center;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px) translateX(-50%); }
-    to { opacity: 1; transform: translateY(0) translateX(-50%); }
-}
-
-
-</style>
+    </section>
 
     <!-- Experience Section -->
     <section id="experience" class="experience">
@@ -1764,7 +1867,7 @@
 
                 <div class="contact-form-section">
                     <h3 style="font-size: 1.2rem;">Interested in collaborating on innovative AI/ML projects or exploring creative ideas in web development?</h3>
-                    <p><p>Let's connect and build something impactful together</p></p>
+                    <p>Let's connect and build something impactful together</p>
                     
                     <div class="availability-badge">
                         <div class="availability-dot"></div>
@@ -1781,14 +1884,57 @@
         </div>
     </section>
 
-    <!-- Enhanced JavaScript -->
+    <!-- FIXED CHATBOT WIDGET -->
+    <div class="chatbot-widget" id="chatbotWidget">
+        <button class="chatbot-toggle" id="chatbotToggle" onclick="toggleChatbot()">
+            🤖
+            <div class="notification-badge" id="notificationBadge" style="display: none;">💬</div>
+        </button>
+        
+        <div class="chatbot-popup" id="chatbotPopup">
+            <div class="chatbot-header">
+                <div>
+                    <strong>💬 Ask about Chandisha</strong>
+                    <div style="font-size: 12px; font-weight: 400; opacity: 0.8;">AI Portfolio Assistant</div>
+                </div>
+                <button class="chatbot-close" onclick="closeChatbot()">×</button>
+            </div>
+            
+            <div class="chatbot-content">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot">
+                        👋 Hi! I'm Chandisha's AI assistant. I can answer questions about her projects, experience, and research. What would you like to know?
+                    </div>
+                </div>
+                
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Ask about Chandisha's work..." maxlength="200">
+                    <button class="send-button" id="sendButton" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chatbot-status">
+                🔒 Powered by AI • All conversations are private
+            </div>
+        </div>
+    </div>
+
     <script>
         // Professional particles with tech/science icons
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
             const particleCount = 30;
             
-            // Professional tech/science symbols
             const techSymbols = [
                 '⚗️', '🔬', '🧬', '💻', '📊', '🤖', '⚡', '🔍', 
                 '📡', '🛸', '⚙️', '🔧', '📈', '💡', '🌐', '🎯',
@@ -1864,19 +2010,6 @@
             });
         }
 
-        // Mouse tracking for project cards
-        function handleMouseTracking() {
-            document.querySelectorAll('.project-card').forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = ((e.clientX - rect.left) / rect.width) * 100;
-                    const y = ((e.clientY - rect.top) / rect.height) * 100;
-                    card.style.setProperty('--x', x + '%');
-                    card.style.setProperty('--y', y + '%');
-                });
-            });
-        }
-
         // Theme toggle
         function toggleTheme() {
             const body = document.body;
@@ -1920,131 +2053,250 @@
             }, 120);
         }
 
-        // Stats counter animation
-        function animateStats() {
-            const stats = document.querySelectorAll('.stat-number');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const target = entry.target;
-                        const text = target.textContent;
-                        const statLabel = target.nextElementSibling.textContent;
-                        
-                        if (statLabel === 'Published Paper' || statLabel === 'Core Expertise') {
-                            return;
-                        }
-                        
-                        if (text.match(/^\d+%?$/) || text.match(/^\d+\+$/)) {
-                            const finalNumber = parseInt(text);
-                            let current = 0;
-                            const increment = finalNumber / 40;
-                            
-                            const timer = setInterval(() => {
-                                current += increment;
-                                if (current >= finalNumber) {
-                                    current = finalNumber;
-                                    clearInterval(timer);
-                                }
-                                target.textContent = Math.floor(current) + 
-                                    (text.includes('%') ? '%' : text.includes('+') ? '+' : '');
-                            }, 40);
-                        }
-                    }
-                });
-            }, { threshold: 0.5 });
-            
-            stats.forEach(stat => observer.observe(stat));
-        }
+        // FIXED CHATBOT FUNCTIONALITY
+        let chatbotOpen = false;
+        let hasInteracted = false;
+        
+        // Knowledge base about Chandisha
+        const knowledgeBase = {
+            projects: {
+                'breast cancer': 'I developed an uncertainty-aware cross-modal attention model for breast cancer classification using ultrasound imaging and clinical data, achieving 90% accuracy and 98% recall on the Breast-Lesions-USG dataset.',
+                'violence detection': 'I led the development of a real-time violence detection system for public safety using advanced CCTV analytics, achieving 92.43% accuracy in threat detection.',
+                'pneumonia': 'I created an AI-powered diagnostic assistant for detecting pneumonia from chest X-ray images with 94.65% accuracy using optimized CNNs.',
+                'brain tumor': 'I worked on radiogenomic analysis for predicting MGMT promoter methylation in glioblastoma patients using multimodal MRI analysis.'
+            },
+            experience: {
+                'iit jodhpur': 'I am currently a Research Intern at IIT Jodhpur (February 2025 – July 2025) working on uncertainty-aware deep learning models for medical image analysis.',
+                'smart india hackathon': 'I was Team Lead & AI Developer at Smart India Hackathon 2024 Grand Finale, developing a comprehensive real-time violence detection system.',
+                'research': 'My research paper on uncertainty-aware deep learning in medical imaging was accepted at MICCAI 2025: 2nd Deep Breast.'
+            },
+            education: {
+                'college': 'I am pursuing B.Tech in Computer Science and Engineering at Future Institute of Technology, Rajpur, Sonarpur (August 2022 – June 2026).',
+                'school': 'I completed Higher Secondary Education at Nava Nalanda High School, Golpark (June 2019 – February 2021).'
+            },
+            skills: {
+                'programming': 'I am proficient in Python, C/C++, SQL, and JavaScript.',
+                'ai ml': 'I work with TensorFlow, PyTorch, Keras, Scikit-learn, and OpenCV for AI/ML projects.',
+                'specialization': 'I specialize in Computer Vision, Deep Learning, Medical AI, NLP, and Research.',
+                'tools': 'I use Flask, Git/GitHub, Docker, VS Code, and MediaPipe for development.'
+            },
+            contact: {
+                'email': 'You can reach me at daschandisha@gmail.com',
+                'phone': 'My phone number is +91 7439261382',
+                'location': 'I am based in Kolkata, West Bengal, India',
+                'linkedin': 'Find me on LinkedIn: https://www.linkedin.com/in/chandisha-das-3b67a6253/',
+                'github': 'Check out my GitHub: https://github.com/Chandisha',
+                'kaggle': 'My Kaggle profile: https://www.kaggle.com/chandisha'
+            }
+        };
 
-        // Floating tech icons
-        function createFloatingElements() {
-            const floatingIcons = ['💡', '🔬', '🤖', '⚡', '🧬', '📊'];
-            const icon = floatingIcons[Math.floor(Math.random() * floatingIcons.length)];
+        function findBestResponse(message) {
+            const lowerMessage = message.toLowerCase();
             
-            const floater = document.createElement('div');
-            floater.textContent = icon;
-            floater.style.position = 'fixed';
-            floater.style.fontSize = '20px';
-            floater.style.left = Math.random() * 100 + '%';
-            floater.style.top = '100%';
-            floater.style.pointerEvents = 'none';
-            floater.style.zIndex = '1';
-            floater.style.opacity = '0.6';
-            floater.style.animation = `floatUp 12s linear infinite`;
+            // Greeting responses
+            if (lowerMessage.match(/\b(hi|hello|hey|greetings)\b/)) {
+                return "👋 Hello! I'm here to help you learn about Chandisha's work and experience. You can ask me about her projects, research, skills, or contact information.";
+            }
             
-            document.body.appendChild(floater);
+            // Projects
+            if (lowerMessage.includes('project')) {
+                return "🔬 Chandisha has worked on several exciting projects:\n\n• Breast Cancer Classification (90% accuracy)\n• Real-time Violence Detection System (92.43% accuracy)\n• Pneumonia Detection (94.65% accuracy)\n• Brain Tumor Analysis for MICCAI challenge\n\nWhich project would you like to know more about?";
+            }
             
-            setTimeout(() => {
-                if (floater.parentNode) {
-                    floater.remove();
-                }
-            }, 12000);
+            if (lowerMessage.match(/\b(breast cancer|cancer|medical|ultrasound)\b/)) {
+                return knowledgeBase.projects['breast cancer'] + "\n\n🏆 This work led to a paper acceptance at MICCAI 2025!";
+            }
+            
+            if (lowerMessage.match(/\b(violence|detection|safety|cctv)\b/)) {
+                return knowledgeBase.projects['violence detection'] + "\n\n🎯 This was developed during Smart India Hackathon 2024 Grand Finale.";
+            }
+            
+            if (lowerMessage.match(/\b(pneumonia|lung|xray|x-ray)\b/)) {
+                return knowledgeBase.projects['pneumonia'] + "\n\n🏥 This system is designed to be clinical-ready for healthcare applications.";
+            }
+            
+            if (lowerMessage.match(/\b(brain|tumor|mri|radiogenomic)\b/)) {
+                return knowledgeBase.projects['brain tumor'] + "\n\n🧠 This project involved sophisticated CNN architectures for advanced medical analysis.";
+            }
+            
+            // Experience
+            if (lowerMessage.match(/\b(experience|work|job|internship)\b/)) {
+                return "💼 Chandisha's professional experience:\n\n🔬 Research Intern at IIT Jodhpur (Feb 2025 - Jul 2025)\n🏆 Team Lead at Smart India Hackathon 2024\n📄 Published researcher at MICCAI 2025\n\nShe's passionate about AI in healthcare!";
+            }
+            
+            if (lowerMessage.match(/\b(iit|jodhpur|research intern)\b/)) {
+                return knowledgeBase.experience['iit jodhpur'] + "\n\n🎓 This is where she's making significant contributions to medical AI research.";
+            }
+            
+            // Skills
+            if (lowerMessage.match(/\b(skill|technology|programming|language)\b/)) {
+                return "🚀 Chandisha's technical skills:\n\n💻 Programming: Python, C/C++, SQL, JavaScript\n🧠 AI/ML: TensorFlow, PyTorch, Keras, OpenCV\n📊 Data Science: Pandas, NumPy, Matplotlib\n🔧 Tools: Flask, Git, Docker, VS Code\n\nHer specialty is in Medical AI and Computer Vision!";
+            }
+            
+            // Education
+            if (lowerMessage.match(/\b(education|study|college|university|degree)\b/)) {
+                return "🎓 Chandisha's educational background:\n\n" + knowledgeBase.education['college'] + "\n\n" + knowledgeBase.education['school'];
+            }
+            
+            // Contact
+            if (lowerMessage.match(/\b(contact|email|phone|reach|connect)\b/)) {
+                return "📞 Here's how you can connect with Chandisha:\n\n📧 " + knowledgeBase.contact['email'] + "\n📱 " + knowledgeBase.contact['phone'] + "\n📍 " + knowledgeBase.contact['location'] + "\n\n🔗 Social Links:\n• LinkedIn: " + knowledgeBase.contact['linkedin'] + "\n• GitHub: " + knowledgeBase.contact['github'];
+            }
+            
+            // Research
+            if (lowerMessage.match(/\b(research|paper|publication|miccai)\b/)) {
+                return "📄 Chandisha's research achievements:\n\n🏆 Paper accepted at MICCAI 2025: 2nd Deep Breast\n🔬 Research focus: Uncertainty-aware deep learning in medical imaging\n🎯 Specialization: Healthcare AI and Computer Vision\n\nHer work combines technical innovation with real-world medical applications!";
+            }
+            
+            // Achievements
+            if (lowerMessage.match(/\b(achievement|award|recognition|accomplishment)\b/)) {
+                return "🏆 Chandisha's key achievements:\n\n📄 Published paper at MICCAI 2025\n🥇 Smart India Hackathon 2024 Grand Finalist\n🎯 90% accuracy in breast cancer classification\n⚡ 92.43% accuracy in violence detection\n🏥 94.65% accuracy in pneumonia detection\n\nShe's making real impact in AI and healthcare!";
+            }
+            
+            // Default response
+            const responses = [
+                "🤔 That's an interesting question! You can ask me about Chandisha's projects, research, experience, skills, or how to contact her.",
+                "💡 I can help you learn about Chandisha's work in AI/ML, her research at IIT Jodhpur, or her exciting projects in medical AI.",
+                "🚀 Feel free to ask about any aspect of Chandisha's portfolio - from her technical skills to her published research!"
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
         }
-
-        // Ripple effect for buttons
-        document.querySelectorAll('.btn, .resume-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const ripple = document.createElement('span');
-                ripple.style.position = 'absolute';
-                ripple.style.borderRadius = '50%';
-                ripple.style.transform = 'scale(0)';
-                ripple.style.animation = 'ripple 0.6s linear';
-                ripple.style.backgroundColor = 'rgba(255,255,255,0.3)';
+        
+        function toggleChatbot() {
+            const popup = document.getElementById('chatbotPopup');
+            const badge = document.getElementById('notificationBadge');
+            
+            chatbotOpen = !chatbotOpen;
+            
+            if (chatbotOpen) {
+                popup.classList.add('active');
+                badge.style.display = 'none';
+                hasInteracted = true;
                 
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
-                
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = x + 'px';
-                ripple.style.top = y + 'px';
-                
-                this.appendChild(ripple);
-                
+                // Focus on input
                 setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-            });
+                    document.getElementById('chatInput').focus();
+                }, 300);
+                
+            } else {
+                closeChatbot();
+            }
+        }
+        
+        function closeChatbot() {
+            const popup = document.getElementById('chatbotPopup');
+            popup.classList.remove('active');
+            chatbotOpen = false;
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Simulate AI response delay
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = findBestResponse(message);
+                addMessage(response, 'bot');
+            }, 1000 + Math.random() * 1000);
+        }
+        
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.textContent = text;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'block';
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+        
+        // Enter key to send message
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Show notification after 3 seconds if user hasn't interacted
+        setTimeout(() => {
+            if (!hasInteracted) {
+                const badge = document.getElementById('notificationBadge');
+                badge.style.display = 'flex';
+                
+                const toggle = document.getElementById('chatbotToggle');
+                toggle.style.animation = 'pulse 1s infinite';
+            }
+        }, 3000);
+        
+        // Hide notification on any user interaction
+        document.addEventListener('click', () => {
+            if (!hasInteracted) {
+                hasInteracted = true;
+                const badge = document.getElementById('notificationBadge');
+                badge.style.display = 'none';
+            }
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === '/') {
+                e.preventDefault();
+                toggleChatbot();
+            }
+            if (e.key === 'Escape' && chatbotOpen) {
+                closeChatbot();
+            }
         });
 
         // Initialize all functions
         document.addEventListener('DOMContentLoaded', function() {
             createParticles();
             loadTheme();
-            handleMouseTracking();
             setTimeout(typeWriter, 1500);
-            setTimeout(animateStats, 800);
             
             // Desktop mode popup
             function checkDeviceMode() {
                 const warning = document.getElementById('desktopWarning');
                 if (!warning) return;
 
-                // Reset state
                 warning.style.display = 'none';
                 warning.classList.remove('fade-out');
 
                 if (window.innerWidth <= 768) {
-                    // Show it first
                     warning.style.display = 'block';
-
-                    // Trigger fade out after 2s
                     setTimeout(() => {
                         warning.classList.add('fade-out');
                     }, 2000);
-
-                    // Fully hide after fade (2s fade + 0.5s delay)
                     setTimeout(() => {
-                     warning.style.display = 'none';
+                        warning.style.display = 'none';
                         warning.classList.remove('fade-out');
-                 }, 2500);
-             }
+                    }, 2500);
+                }
             }
 
             checkDeviceMode();
             window.addEventListener('resize', checkDeviceMode);
-
 
             // Event listeners
             window.addEventListener('scroll', () => {
@@ -2052,365 +2304,13 @@
                 handleNavScroll();
             });
             
-            // Initial calls
             handleNavScroll();
             updateScrollProgress();
-            
-            // Create floating elements periodically
-            setInterval(createFloatingElements, 8000);
         });
 
-        // Enhanced project card interactions
-        document.querySelectorAll('.project-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-12px) rotateX(3deg) rotateY(2deg)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) rotateX(0deg) rotateY(0deg)';
-            });
-        });
-
-        // Skill item hover effects
-        document.querySelectorAll('.skill-item').forEach((item, index) => {
-            item.style.animationDelay = `${index * 0.05}s`;
-            item.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-3px) scale(1.08) rotateY(5deg)';
-            });
-            item.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1) rotateY(0deg)';
-            });
-        });
-
-        // Timeline item tilt effects
-        document.querySelectorAll('.timeline-content').forEach(item => {
-            item.addEventListener('mousemove', function(e) {
-                const rect = this.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateX = (y - centerY) / 8;
-                const rotateY = (centerX - x) / 8;
-                
-                this.style.transform = `translateY(-8px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
-            
-            item.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) rotateX(0deg) rotateY(0deg)';
-            });
-        });
-
-        // Scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -30px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                    
-                    // Stagger effect for multiple elements
-                    if (entry.target.classList.contains('stat-item') || 
-                        entry.target.classList.contains('skill-item')) {
-                        const siblings = Array.from(entry.target.parentElement.children);
-                        const index = siblings.indexOf(entry.target);
-                        entry.target.style.transitionDelay = `${index * 0.08}s`;
-                    }
-                }
-            });
-        }, observerOptions);
-
-        // Observe elements for animations
-        document.querySelectorAll('.project-card, .timeline-content, .skill-category, .stat-item, .contact-item').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Enhanced loading with progress simulation
-        function enhancedLoading() {
-            const loadingText = document.querySelector('.loading-text');
-            const messages = [
-                'Loading Portfolio...',
-                'Initializing AI Components...',
-                'Loading Projects...',
-                'Almost Ready...',
-                'Welcome! 🚀'
-            ];
-            
-            let messageIndex = 0;
-            const messageInterval = setInterval(() => {
-                if (messageIndex < messages.length - 1) {
-                    loadingText.textContent = messages[messageIndex];
-                    messageIndex++;
-                } else {
-                    loadingText.textContent = messages[messageIndex];
-                    clearInterval(messageInterval);
-                    
-                    setTimeout(() => {
-                        document.getElementById('loadingOverlay').classList.add('fade-out');
-                    }, 800);
-                }
-            }, 300);
-        }
-
-        // Replace simple loading
-        window.addEventListener('load', enhancedLoading);
-
-        // Parallax effect for hero section
-        function handleParallax() {
-            const heroImage = document.querySelector('.hero-image');
-            const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.3;
-            
-            if (heroImage && scrolled < window.innerHeight) {
-                heroImage.style.transform = `translateY(${rate}px)`;
-            }
-        }
-
-        window.addEventListener('scroll', handleParallax);
-
-        // Add subtle breathing animation to profile image
-        const profileImage = document.querySelector('.profile-image');
-        if (profileImage) {
-            setInterval(() => {
-                profileImage.style.transform = 'scale(1.02)';
-                setTimeout(() => {
-                    profileImage.style.transform = 'scale(1)';
-                }, 1000);
-            }, 3000);
-        }
-
-        // Professional console messages
+        // Console messages
         console.log('%c🚀 Portfolio Loaded Successfully!', 'color: #64ffda; font-size: 16px; font-weight: bold;');
-        console.log('%c💡 Built with modern web technologies', 'color: #00bcd4; font-size: 12px;');
-        console.log('%c🔬 Showcasing AI/ML expertise in healthcare', 'color: #64ffda; font-size: 12px;');
-
-        // Performance monitoring
-        window.addEventListener('load', function() {
-            const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-            console.log(`⚡ Page loaded in ${loadTime}ms`);
-        });
-
-        // Add smooth transitions for section changes
-        function addSectionTransitions() {
-            const sections = document.querySelectorAll('section');
-            
-            sections.forEach(section => {
-                section.addEventListener('mouseenter', function() {
-                    this.style.transform = 'scale(1.002)';
-                    this.style.transition = 'transform 0.3s ease';
-                });
-                
-                section.addEventListener('mouseleave', function() {
-                    this.style.transform = 'scale(1)';
-                });
-            });
-        }
-
-        // Initialize section transitions
-        addSectionTransitions();
-
-        // Add resume link validation
-        document.querySelector('.resume-btn').addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (href.includes('your-resume-link-here')) {
-                e.preventDefault();
-                alert('Please update the resume link in the code with your actual Google Drive link!');
-                console.log('📄 Update resume link: Replace "your-resume-link-here" with your actual Google Drive file ID');
-            }
-        });
-
-        // Add keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const currentActive = document.querySelector('.nav-link.active');
-            
-            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                e.preventDefault();
-                const currentIndex = Array.from(navLinks).indexOf(currentActive);
-                const nextIndex = (currentIndex + 1) % navLinks.length;
-                navLinks[nextIndex].click();
-            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                e.preventDefault();
-                const currentIndex = Array.from(navLinks).indexOf(currentActive);
-                const prevIndex = currentIndex > 0 ? currentIndex - 1 : navLinks.length - 1;
-                navLinks[prevIndex].click();
-            }
-        });
-
-        // Add focus indicators for accessibility
-        document.querySelectorAll('a, button, .btn').forEach(element => {
-            element.addEventListener('focus', function() {
-                this.style.outline = '2px solid #64ffda';
-                this.style.outlineOffset = '2px';
-            });
-            
-            element.addEventListener('blur', function() {
-                this.style.outline = 'none';
-            });
-        });
-
-        // Optimize animations for mobile
-        function optimizeForMobile() {
-            if (window.innerWidth <= 768) {
-                // Reduce particle count for mobile
-                const particles = document.querySelectorAll('.particle');
-                particles.forEach((particle, index) => {
-                    if (index % 2 === 0) {
-                        particle.style.display = 'none';
-                    }
-                });
-                
-                // Reduce animation complexity
-                document.querySelectorAll('.project-card, .skill-category').forEach(card => {
-                    card.addEventListener('touchstart', function() {
-                        this.style.transform = 'translateY(-5px)';
-                    });
-                    
-                    card.addEventListener('touchend', function() {
-                        this.style.transform = 'translateY(0)';
-                    });
-                });
-            }
-        }
-    // Chatbot Widget Functionality
-    let chatbotOpen = false;
-    let hasInteracted = false;
-    
-    function toggleChatbot() {
-        const popup = document.getElementById('chatbotPopup');
-        const badge = document.getElementById('notificationBadge');
-        
-        chatbotOpen = !chatbotOpen;
-        
-        if (chatbotOpen) {
-            popup.classList.add('active');
-            badge.style.display = 'none';
-            hasInteracted = true;
-            
-            // Track opening
-            console.log('💬 Chatbot opened');
-            
-            // Update button icon
-            document.getElementById('chatbotToggle').innerHTML = '💬<div class="notification-badge" id="notificationBadge" style="display: none;">💬</div>';
-            
-        } else {
-            closeChatbot();
-        }
-    }
-    
-    function closeChatbot() {
-        const popup = document.getElementById('chatbotPopup');
-        const toggle = document.getElementById('chatbotToggle');
-        
-        popup.classList.remove('active');
-        chatbotOpen = false;
-        
-        // Reset button icon
-        toggle.innerHTML = '🤖<div class="notification-badge" id="notificationBadge" style="display: none;">💬</div>';
-        
-        console.log('💬 Chatbot closed');
-    }
-    
-    // Show notification after 3 seconds if user hasn't interacted
-    setTimeout(() => {
-        if (!hasInteracted) {
-            const badge = document.getElementById('notificationBadge');
-            badge.style.display = 'flex';
-            
-            // Create a subtle bounce animation
-            const toggle = document.getElementById('chatbotToggle');
-            toggle.style.animation = 'pulse 1s infinite';
-            
-            console.log('💡 Chatbot notification shown');
-        }
-    }, 3000);
-    
-    // Hide notification on any user interaction
-    document.addEventListener('click', () => {
-        if (!hasInteracted) {
-            hasInteracted = true;
-            const badge = document.getElementById('notificationBadge');
-            badge.style.display = 'none';
-        }
-    });
-    
-    // Keyboard shortcut to open chatbot (Ctrl + /)
-    document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key === '/') {
-            e.preventDefault();
-            toggleChatbot();
-        }
-    });
-    
-    // Close chatbot on Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && chatbotOpen) {
-            closeChatbot();
-        }
-    });
-    
-    // Responsive handling
-    function handleChatbotResize() {
-        const popup = document.getElementById('chatbotPopup');
-        
-        if (window.innerWidth <= 768) {
-            popup.style.width = '90vw';
-            popup.style.right = '5vw';
-            popup.style.height = '70vh';
-        } else {
-            popup.style.width = '400px';
-            popup.style.right = '0';
-            popup.style.height = '600px';
-        }
-    }
-    
-    window.addEventListener('resize', handleChatbotResize);
-    handleChatbotResize(); // Initial call
-    
-    // Console welcome message
-    console.log('🤖 Portfolio chatbot loaded! Press Ctrl+/ to open quickly.');
-        </script>
-    
-        <!-- Add this HTML before the closing </body> tag -->
-    
-        <!-- Chatbot Widget -->
-        <div class="chatbot-widget" id="chatbotWidget">
-            <!-- Toggle Button -->
-        <button class="chatbot-toggle" id="chatbotToggle" onclick="toggleChatbot()">
-                🤖
-                <div class="notification-badge" id="notificationBadge">💬</div>
-            </button>
-            
-            <!-- Chatbot Popup -->
-            <div class="chatbot-popup" id="chatbotPopup">
-                <div class="chatbot-header">
-                    <div>
-                        <strong>💬 Ask about Chandisha</strong>
-                        <div style="font-size: 12px; font-weight: 400; opacity: 0.8;">AI Portfolio Assistant</div>
-                    </div>
-                    <button class="chatbot-close" onclick="closeChatbot()">×</button>
-                </div>
-                
-                <!-- Replace YOUR_HUGGINGFACE_SPACE_URL with your actual deployed URL -->
-                <iframe 
-                    class="chatbot-iframe" 
-                    src="https://huggingface.co/spaces/Chandisha/aibot"
-                    title="Chandisha Portfolio Assistant">
-                </iframe>
-                
-                <div class="chatbot-status">
-                🔒 Powered by AI • All conversations are private
-                </div>
-            </div>
-        </div>
-    
+        console.log('%c🤖 Interactive AI Assistant Ready!', 'color: #00bcd4; font-size: 12px;');
+    </script>
 </body>
 </html>
-
-
