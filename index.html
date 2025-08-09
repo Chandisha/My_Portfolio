@@ -1222,6 +1222,180 @@
                 opacity: 0;
             }
         }
+
+    <!-- Add this CSS to your existing portfolio HTML (inside <style> section) -->
+
+    /* Chatbot Widget Styles */
+    .chatbot-widget {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 10000;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .chatbot-toggle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
+        transition: all 0.3s ease;
+        animation: pulse 2s infinite;
+    }
+
+    .chatbot-toggle:hover {
+        transform: scale(1.1);
+        box-shadow: 0 12px 35px rgba(100, 255, 218, 0.4);
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .chatbot-popup {
+        position: absolute;
+        bottom: 70px;
+        right: 0;
+        width: 400px;
+        height: 600px;
+        background: rgba(10, 10, 10, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(100, 255, 218, 0.2);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    .chatbot-popup.active {
+        display: flex;
+    }
+    
+    .chatbot-header {
+        padding: 20px;
+        background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+        color: #000000;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+    align-items: center;
+    }
+    
+    .chatbot-close {
+        background: none;
+        border: none;
+        color: #000000;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .chatbot-close:hover {
+        background: rgba(0, 0, 0, 0.1);
+        transform: rotate(90deg);
+    }
+    
+    .chatbot-iframe {
+        flex: 1;
+        border: none;
+        background: transparent;
+    }
+    
+    .chatbot-status {
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-top: 1px solid rgba(100, 255, 218, 0.2);
+        color: #64ffda;
+        font-size: 12px;
+        text-align: center;
+    }
+        
+        /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .chatbot-popup {
+            width: 350px;
+            height: 500px;
+            bottom: 70px;
+            right: -25px;
+        }
+        
+        .chatbot-widget {
+            bottom: 15px;
+            right: 15px;
+        }
+        
+        .chatbot-toggle {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
+    }
+    
+    /* Light mode compatibility */
+    body.light-mode .chatbot-popup {
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(0, 0, 0, 0.2);
+}
+    
+    body.light-mode .chatbot-status {
+        background: rgba(0, 0, 0, 0.05);
+        color: #0066cc;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Notification badge */
+    .notification-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 20px;
+        height: 20px;
+        background: #ff4444;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: bold;
+        color: white;
+        animation: bounce 1s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-3px); }
+        60% { transform: translateY(-2px); }
+    }
+    
     </style>
 </head>
 <body>
@@ -1296,7 +1470,7 @@
                 <div class="about-text">
                     <p>I'm a final year Computer Science Engineering student at Future Institute of Technology with a strong interest in artificial intelligence and machine learning, particularly in healthcare applications</p>
                     <p>My research at IIT Jodhpur involves developing deep learning models for medical image analysis, particularly in breast cancer classification and brain tumor detection.</p>
-                    <p>My contributions to uncertainty-aware deep learning in medical imaging led to a paper accepted at <strong>MICCAI Deep-Breath 2025</strong>, highlighting the role of AI in transforming medical diagnostics.</p>
+                    <p>My contributions to uncertainty-aware deep learning in medical imaging led to a paper accepted at <strong>MICCAI Deep-Breast 2025</strong>, highlighting the role of AI in transforming medical diagnostics.</p>
                     <p>I'm passionate about creating AI solutions that drive meaningful improvements in daily life, combining technical expertise with an understanding of real-world challenges and human needs.</p>
                 </div>
                 <div class="stats">
@@ -1391,7 +1565,7 @@
                         <div class="timeline-title">Research Intern</div>
                         <div class="timeline-company">February 2025 – July 2025</div>
                         <p>Developed uncertainty-aware cross-modal attention mechanisms for breast cancer classification using ultrasound imaging and clinical data. Achieved 90% accuracy and 98% recall on the Breast-Lesions-USG dataset.</p>
-                        <p><strong>Achievement:</strong> Research paper accepted at MICCAI 2025: 2nd Deep-Breath.</p>
+                        <p><strong>Achievement:</strong> Research paper accepted at MICCAI 2025: 2nd Deep Breast.</p>
                     </div>
                 </div>
                 
@@ -2104,10 +2278,139 @@
                 });
             }
         }
-
-    </script>
+    // Chatbot Widget Functionality
+    let chatbotOpen = false;
+    let hasInteracted = false;
+    
+    function toggleChatbot() {
+        const popup = document.getElementById('chatbotPopup');
+        const badge = document.getElementById('notificationBadge');
+        
+        chatbotOpen = !chatbotOpen;
+        
+        if (chatbotOpen) {
+            popup.classList.add('active');
+            badge.style.display = 'none';
+            hasInteracted = true;
+            
+            // Track opening
+            console.log('💬 Chatbot opened');
+            
+            // Update button icon
+            document.getElementById('chatbotToggle').innerHTML = '💬<div class="notification-badge" id="notificationBadge" style="display: none;">💬</div>';
+            
+        } else {
+            closeChatbot();
+        }
+    }
+    
+    function closeChatbot() {
+        const popup = document.getElementById('chatbotPopup');
+        const toggle = document.getElementById('chatbotToggle');
+        
+        popup.classList.remove('active');
+        chatbotOpen = false;
+        
+        // Reset button icon
+        toggle.innerHTML = '🤖<div class="notification-badge" id="notificationBadge" style="display: none;">💬</div>';
+        
+        console.log('💬 Chatbot closed');
+    }
+    
+    // Show notification after 3 seconds if user hasn't interacted
+    setTimeout(() => {
+        if (!hasInteracted) {
+            const badge = document.getElementById('notificationBadge');
+            badge.style.display = 'flex';
+            
+            // Create a subtle bounce animation
+            const toggle = document.getElementById('chatbotToggle');
+            toggle.style.animation = 'pulse 1s infinite';
+            
+            console.log('💡 Chatbot notification shown');
+        }
+    }, 3000);
+    
+    // Hide notification on any user interaction
+    document.addEventListener('click', () => {
+        if (!hasInteracted) {
+            hasInteracted = true;
+            const badge = document.getElementById('notificationBadge');
+            badge.style.display = 'none';
+        }
+    });
+    
+    // Keyboard shortcut to open chatbot (Ctrl + /)
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === '/') {
+            e.preventDefault();
+            toggleChatbot();
+        }
+    });
+    
+    // Close chatbot on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && chatbotOpen) {
+            closeChatbot();
+        }
+    });
+    
+    // Responsive handling
+    function handleChatbotResize() {
+        const popup = document.getElementById('chatbotPopup');
+        
+        if (window.innerWidth <= 768) {
+            popup.style.width = '90vw';
+            popup.style.right = '5vw';
+            popup.style.height = '70vh';
+        } else {
+            popup.style.width = '400px';
+            popup.style.right = '0';
+            popup.style.height = '600px';
+        }
+    }
+    
+    window.addEventListener('resize', handleChatbotResize);
+    handleChatbotResize(); // Initial call
+    
+    // Console welcome message
+    console.log('🤖 Portfolio chatbot loaded! Press Ctrl+/ to open quickly.');
+        </script>
+    
+        <!-- Add this HTML before the closing </body> tag -->
+    
+        <!-- Chatbot Widget -->
+        <div class="chatbot-widget" id="chatbotWidget">
+            <!-- Toggle Button -->
+        <button class="chatbot-toggle" id="chatbotToggle" onclick="toggleChatbot()">
+                🤖
+                <div class="notification-badge" id="notificationBadge">💬</div>
+            </button>
+            
+            <!-- Chatbot Popup -->
+            <div class="chatbot-popup" id="chatbotPopup">
+                <div class="chatbot-header">
+                    <div>
+                        <strong>💬 Ask about Chandisha</strong>
+                        <div style="font-size: 12px; font-weight: 400; opacity: 0.8;">AI Portfolio Assistant</div>
+                    </div>
+                    <button class="chatbot-close" onclick="closeChatbot()">×</button>
+                </div>
+                
+                <!-- Replace YOUR_HUGGINGFACE_SPACE_URL with your actual deployed URL -->
+                <iframe 
+                    class="chatbot-iframe" 
+                    src="https://huggingface.co/spaces/Chandisha/aibot"
+                    title="Chandisha Portfolio Assistant">
+                </iframe>
+                
+                <div class="chatbot-status">
+                🔒 Powered by AI • All conversations are private
+                </div>
+            </div>
+        </div>
+    
 </body>
 </html>
-
 
 
