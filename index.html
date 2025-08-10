@@ -2676,120 +2676,133 @@ const HF_STREAM_BASE = 'https://chandisha-aibot.hf.space/gradio_api/call';
 let chatHistory = [];
 
 // Function to call your Hugging Face Gradio Streaming API
+
+// FIXED: Replace your callHuggingFaceAPI function with this one
 async function callHuggingFaceAPI(message) {
     try {
         console.log('🚀 Sending message to HF Gradio API:', message);
         console.log('💬 Current chat history:', chatHistory);
-        
-        // Step 1: Initialize the API call
-        const initResponse = await fetch(`${HF_API_BASE}/user_message`, {
+
+        const eventResponse = await fetch(`${HUGGING_FACE_URL}/call/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                data: [
-                    message,  // User message
-                    chatHistory  // Chat history in the expected format
-                ]
+                data: [message, chatHistory]
             })
         });
 
-        if (!initResponse.ok) {
-            throw new Error(`Init request failed: ${initResponse.status}`);
+        if (!eventResponse.ok) {
+            throw new Error(`Event call failed: ${eventResponse.status}`);
         }
 
-        const initResult = await initResponse.json();
-        console.log('📡 Init response:', initResult);
-        
-        if (!initResult.event_id) {
-            throw new Error('No event_id received from API');
+        const eventData = await eventResponse.json();
+        console.log('📡 Event ID received:', eventData.event_id);
+
+        if (!eventData.event_id) {
+            throw new Error('No event_id received');
         }
 
-        const eventId = initResult.event_id;
-        console.log('🎯 Event ID:', eventId);
-
-        // Step 2: Get the streaming response
-        const streamUrl = `${HF_STREAM_BASE}/user_message/${eventId}`;
+        // Try streaming response
+        const streamUrl = `${HUGGING_FACE_URL}/call/chat/${eventData.event_id}`;
         console.log('🌊 Stream URL:', streamUrl);
 
-        const streamResponse = await fetch(streamUrl, {
-            method: 'GET',
-            headers: {
-                'Accept': 'text/event-stream',
-                'Cache-Control': 'no-cache',
-            }
-        });
-
+        const streamResponse = await fetch(streamUrl);
+        
         if (!streamResponse.ok) {
-            throw new Error(`Stream request failed: ${streamResponse.status}`);
+            throw new Error(`Stream failed: ${streamResponse.status}`);
         }
 
-        // Step 3: Process the streaming response
         const reader = streamResponse.body.getReader();
         const decoder = new TextDecoder();
-        let buffer = '';
-        let finalResponse = '';
-        let updatedHistory = [];
+        let accumulatedData = '';
+        let finalResponse = null;
+
+        console.log('📥 Starting to read stream...');
 
         while (true) {
             const { done, value } = await reader.read();
-            if (done) break;
-
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || ''; // Keep incomplete line
-
-            for (const line of lines) {
-                if (line.trim().startsWith('data: ')) {
-                    try {
-                        const jsonStr = line.slice(6); // Remove 'data: '
-                        if (jsonStr.trim() === '') continue;
-                        
-                        const data = JSON.parse(jsonStr);
-                        console.log('📦 Stream data:', data);
-
-                        // Check for completion
-                        if (data.msg === 'process_completed' && data.output) {
-                            if (data.output.data && data.output.data.length > 0) {
-                                finalResponse = data.output.data[0] || '';
-                                // Update chat history if provided
-                                if (data.output.data.length > 1 && Array.isArray(data.output.data[1])) {
-                                    updatedHistory = data.output.data[1];
-                                    chatHistory = updatedHistory;
-                                    console.log('📚 Updated chat history:', chatHistory);
-                                }
-                            }
-                            break;
-                        }
-                    } catch (parseError) {
-                        console.log('⚠️ Parse error (normal for streaming):', parseError.message);
-                    }
-                }
+            
+            if (done) {
+                console.log('✅ Stream finished');
+                break;
             }
 
-            if (finalResponse) break;
+            const chunk = decoder.decode(value, { stream: true });
+            accumulatedData += chunk;
+            console.log('📦 Raw chunk received:', chunk);
+
+            // Process each complete line
+            const lines = accumulatedData.split('\n');
+            accumulatedData = lines.pop() || ''; // Keep incomplete line for next iteration
+
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                if (!trimmedLine) continue;
+
+                console.log('🔍 Processing line:', trimmedLine);
+
+                try {
+                    // Handle different Gradio response formats
+                    if (trimmedLine.startsWith('data: ')) {
+                        const jsonStr = trimmedLine.slice(6); // Remove 'data: '
+                        console.log('📋 Parsing JSON string:', jsonStr);
+                        
+                        const data = JSON.parse(jsonStr);
+                        console.log('📊 Parsed stream data:', data);
+
+                        // Extract response from different possible formats
+                        if (data.output && data.output.data) {
+                            // Format 1: {output: {data: [response]}}
+                            finalResponse = data.output.data[0];
+                            console.log('🎯 Format 1 - Response found:', finalResponse);
+                        } else if (Array.isArray(data) && data.length > 0) {
+                            // Format 2: [response, history]
+                            finalResponse = data[0];
+                            console.log('🎯 Format 2 - Response found:', finalResponse);
+                        } else if (data.data && Array.isArray(data.data)) {
+                            // Format 3: {data: [response, history]}
+                            finalResponse = data.data[0];
+                            console.log('🎯 Format 3 - Response found:', finalResponse);
+                        } else if (typeof data === 'string') {
+                            // Format 4: Direct string response
+                            finalResponse = data;
+                            console.log('🎯 Format 4 - Direct string response:', finalResponse);
+                        }
+                    } else if (trimmedLine.startsWith('{')) {
+                        // Direct JSON without 'data: ' prefix
+                        console.log('📋 Parsing direct JSON:', trimmedLine);
+                        const data = JSON.parse(trimmedLine);
+                        console.log('📊 Parsed direct data:', data);
+
+                        if (data.output && data.output.data) {
+                            finalResponse = data.output.data[0];
+                            console.log('🎯 Direct JSON - Response found:', finalResponse);
+                        }
+                    }
+                } catch (parseError) {
+                    console.log('⚠️ Error parsing line:', trimmedLine, 'Error:', parseError.message);
+                }
+            }
         }
 
-        if (!finalResponse) {
-            throw new Error('No valid response received from streaming API');
+        console.log('✅ Final response extracted:', finalResponse);
+
+        if (finalResponse && typeof finalResponse === 'string' && finalResponse.trim()) {
+            return finalResponse.trim();
         }
 
-        console.log('✅ Final API response:', finalResponse);
-        return finalResponse;
+        // If streaming parsing failed, try simple API call
+        console.log('🔄 Streaming parsing failed, trying simple API...');
+        return await trySimpleAPI(message);
 
     } catch (error) {
-        console.error('❌ Error calling Hugging Face API:', error);
-        
-        // Check if it's a network/CORS error
-        if (error.message.includes('fetch') || error.message.includes('CORS') || error.name === 'TypeError') {
-            console.log('🔄 Network/CORS error detected, using fallback response');
-        }
-        
-        throw error; // Re-throw to handle in calling function
+        console.error('❌ Hugging Face API error:', error);
+        return await trySimpleAPI(message);
     }
 }
-
+// Enhanced fallback response function with better context awareness
 // Enhanced fallback response function with better context awareness
 function getFallbackResponse(message) {
     const lowerMessage = message.toLowerCase();
@@ -2886,6 +2899,47 @@ function getRandomResponse(responseArray) {
     return responseArray[Math.floor(Math.random() * responseArray.length)];
 }
 
+// HELPER FUNCTION: Add this new function for simple API fallback
+async function trySimpleAPI(message) {
+    try {
+        console.log('🔄 Trying simple API approach...');
+        
+        const response = await fetch(`${HUGGING_FACE_URL}/api/predict`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                data: [message, chatHistory]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Simple API failed: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('📊 Simple API result:', result);
+
+        if (result.data && Array.isArray(result.data) && result.data[0]) {
+            console.log('✅ Simple API success:', result.data[0]);
+            return result.data[0];
+        }
+
+        throw new Error('No valid response from simple API');
+
+    } catch (error) {
+        console.error('❌ Simple API error:', error);
+        console.log('💡 Falling back to offline knowledge base');
+        return getFallbackResponse(message);
+    }
+}
+
+// Helper function to get random response for variety
+function getRandomResponse(responseArray) {
+    return responseArray[Math.floor(Math.random() * responseArray.length)];
+}
+
 function toggleChatbot() {
     const popup = document.getElementById('chatbotPopup');
     const badge = document.getElementById('notificationBadge');
@@ -2919,54 +2973,61 @@ function closeChatbot() {
     chatbotOpen = false;
 }
 
-// UPDATED: Enhanced message sending with proper Gradio API handling
+// FIXED: Replace your sendMessage function with this one
 async function sendMessage() {
-    const input = document.getElementById('chatInput');
-    const sendButton = document.getElementById('sendButton');
+    const input = document.getElementById('messageInput');
     const message = input.value.trim();
     
     if (!message) return;
-    
-    // Disable input and button during processing
-    input.disabled = true;
-    sendButton.disabled = true;
-    updateConnectionStatus('🔄 Processing your message...');
-    
+
+    console.log('📤 User message:', message);
+
     // Add user message to chat
     addMessage(message, 'user');
     input.value = '';
+    
+    // Add user message to history
+    chatHistory.push({role: "user", content: message});
     
     // Show typing indicator
     showTypingIndicator();
     
     try {
-        // Try Hugging Face Gradio API first
-        const response = await callHuggingFaceAPI(message);
-        
-        // Hide typing indicator
+        console.log('🤖 Getting AI response...');
+        let response;
+
+        if (USE_HUGGING_FACE_API) {
+            console.log('🎯 Using Hugging Face API');
+            response = await callHuggingFaceAPI(message);
+        }
+
+        // If no response from API, use fallback
+        if (!response || response.trim() === '') {
+            console.log('💡 Using offline knowledge base');
+            response = getFallbackResponse(message);
+        }
+
+        // Remove typing indicator
         hideTypingIndicator();
         
-        // Add bot response with rich formatting
-        addBotMessage(response);
+        console.log('✅ Final response to display:', response);
         
-        updateConnectionStatus('🟢 Connected to Chandisha\'s AI');
+        // Add AI response to chat
+        addMessage(response, 'assistant');
+        
+        // Add AI response to history
+        chatHistory.push({role: "assistant", content: response});
+        
+        console.log('📚 Updated chat history:', chatHistory);
         
     } catch (error) {
-        console.error('❌ Error getting API response:', error);
+        console.error('💥 Error in sendMessage:', error);
         hideTypingIndicator();
         
-        // Use enhanced fallback system
+        // Fallback to offline response
         const fallbackResponse = getFallbackResponse(message);
-        addBotMessage(fallbackResponse);
-        
-        updateConnectionStatus('🟡 Using offline knowledge base');
-    } finally {
-        // Re-enable input and button
-        input.disabled = false;
-        sendButton.disabled = false;
-        setTimeout(() => {
-            if (input) input.focus();
-        }, 100);
+        addMessage(fallbackResponse, 'assistant');
+        chatHistory.push({role: "assistant", content: fallbackResponse});
     }
 }
 
