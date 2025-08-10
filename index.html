@@ -20,6 +20,59 @@
             overflow-x: hidden;
         }
 
+        /* CURSOR TRAIL EFFECT */
+        .cursor-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            z-index: 999999;
+            border-radius: 50%;
+            animation: sparkleTrail 1s ease-out forwards;
+        }
+
+        @keyframes sparkleTrail {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+                background: radial-gradient(circle, #64ffda 0%, #00bcd4 50%, transparent 70%);
+                box-shadow: 0 0 20px #64ffda, 0 0 40px #00bcd4;
+            }
+            50% {
+                transform: scale(1.5) rotate(180deg);
+                opacity: 0.8;
+                background: radial-gradient(circle, #00bcd4 0%, #64ffda 50%, transparent 70%);
+            }
+            100% {
+                transform: scale(0.3) rotate(360deg);
+                opacity: 0;
+                background: radial-gradient(circle, transparent 0%, #64ffda 50%, transparent 100%);
+            }
+        }
+
+        .cursor-sparkle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999998;
+            font-size: 16px;
+            animation: sparkleFloat 1.2s ease-out forwards;
+        }
+
+        @keyframes sparkleFloat {
+            0% {
+                opacity: 1;
+                transform: scale(0) translateY(0px) rotate(0deg);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.2) translateY(-20px) rotate(180deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5) translateY(-50px) rotate(360deg);
+            }
+        }
+
         /* Enhanced Particle Background */
         .particles {
             position: fixed;
@@ -233,6 +286,11 @@
 
         body.light-mode .particle {
             color: #0066cc;
+        }
+
+        body.light-mode .cursor-trail {
+            background: radial-gradient(circle, #0066cc 0%, #00bcd4 50%, transparent 70%);
+            box-shadow: 0 0 20px #0066cc, 0 0 40px #00bcd4;
         }
 
         /* Enhanced Hero Section */
@@ -683,7 +741,7 @@
             font-size: 1rem;
         }
 
-        /* Enhanced Timeline */
+        /* MODIFIED TIMELINE - NO LINE, SPARKLE EFFECTS INSTEAD */
         .experience {
             padding: 120px 0;
             position: relative;
@@ -695,21 +753,9 @@
             position: relative;
         }
 
+        /* REMOVED: Timeline line animation */
         .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, #64ffda, #00bcd4);
-            transform: translateX(-50%);
-            animation: timelineDraw 2s ease;
-        }
-
-        @keyframes timelineDraw {
-            from { height: 0; }
-            to { height: 100%; }
+            display: none;
         }
 
         .timeline-item {
@@ -727,24 +773,66 @@
             flex-direction: row-reverse;
         }
 
+        /* MODIFIED: Sparkle effect instead of timeline dot */
         .timeline-item::before {
-            content: '';
+            content: '✨';
             position: absolute;
             left: 50%;
             top: 30px;
-            width: 20px;
-            height: 20px;
-            background: #64ffda;
-            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 24px;
             transform: translateX(-50%);
             z-index: 2;
-            box-shadow: 0 0 20px rgba(100, 255, 218, 0.6);
-            animation: dotPulse 2s ease-in-out infinite;
+            animation: timelineSparkle 3s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes dotPulse {
-            0%, 100% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.3); }
+        @keyframes timelineSparkle {
+            0%, 100% { 
+                transform: translateX(-50%) scale(1) rotate(0deg); 
+                opacity: 0.7;
+            }
+            33% { 
+                transform: translateX(-50%) scale(1.3) rotate(120deg); 
+                opacity: 1;
+            }
+            66% { 
+                transform: translateX(-50%) scale(0.8) rotate(240deg); 
+                opacity: 0.9;
+            }
+        }
+
+        /* Add additional sparkle decorations */
+        .timeline-item::after {
+            content: '⭐';
+            position: absolute;
+            left: 50%;
+            top: 10px;
+            font-size: 12px;
+            transform: translateX(-50%);
+            z-index: 1;
+            animation: smallSparkle 4s ease-in-out infinite;
+            opacity: 0.5;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            content: '💫';
+            top: 60px;
+            animation-delay: 1s;
+        }
+
+        @keyframes smallSparkle {
+            0%, 100% { 
+                transform: translateX(-50%) scale(0.5) rotate(0deg); 
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translateX(-50%) scale(1) rotate(180deg); 
+                opacity: 0.8;
+            }
         }
 
         @keyframes timelineItemSlide {
@@ -1852,14 +1940,6 @@
                 margin: 0;
             }
 
-            .timeline::before {
-                left: 20px;
-            }
-
-            .timeline-item::before {
-                left: 20px;
-            }
-
             .projects-grid {
                 grid-template-columns: 1fr;
                 gap: 25px;
@@ -2381,6 +2461,51 @@
     </div>
 
     <script>
+        // CURSOR TRAIL EFFECT IMPLEMENTATION
+        let cursorTrails = [];
+        let sparkleSymbols = ['✨', '⭐', '💫', '🌟', '⚡', '💎', '🔮', '✦', '❄️', '🎯'];
+        
+        function createCursorTrail(x, y) {
+            // Create main trail circle
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x - 10 + 'px';
+            trail.style.top = y - 10 + 'px';
+            document.body.appendChild(trail);
+            
+            // Create sparkle
+            const sparkle = document.createElement('div');
+            sparkle.className = 'cursor-sparkle';
+            sparkle.style.left = x + (Math.random() - 0.5) * 40 + 'px';
+            sparkle.style.top = y + (Math.random() - 0.5) * 40 + 'px';
+            sparkle.textContent = sparkleSymbols[Math.floor(Math.random() * sparkleSymbols.length)];
+            document.body.appendChild(sparkle);
+            
+            // Store references for cleanup
+            cursorTrails.push(trail, sparkle);
+            
+            // Remove elements after animation
+            setTimeout(() => {
+                if (trail.parentNode) trail.parentNode.removeChild(trail);
+                if (sparkle.parentNode) sparkle.parentNode.removeChild(sparkle);
+                // Remove from array
+                const trailIndex = cursorTrails.indexOf(trail);
+                const sparkleIndex = cursorTrails.indexOf(sparkle);
+                if (trailIndex > -1) cursorTrails.splice(trailIndex, 1);
+                if (sparkleIndex > -1) cursorTrails.splice(sparkleIndex, 1);
+            }, 1200);
+        }
+        
+        // Cursor trail event listener with throttling
+        let lastTrailTime = 0;
+        document.addEventListener('mousemove', (e) => {
+            const now = Date.now();
+            if (now - lastTrailTime > 50) { // Throttle to every 50ms
+                createCursorTrail(e.clientX, e.clientY);
+                lastTrailTime = now;
+            }
+        });
+
         // Enhanced particles with smoother movement
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
@@ -2861,9 +2986,9 @@
         });
 
         // Enhanced console messages
-        console.log('%c🚀 Enhanced Portfolio Loaded Successfully!', 'color: #64ffda; font-size: 18px; font-weight: bold; text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);');
+        console.log('%c🚀 Enhanced Portfolio with Cursor Trail Loaded!', 'color: #64ffda; font-size: 18px; font-weight: bold; text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);');
         console.log('%c🤖 AI Assistant Ready with Enhanced Scrolling!', 'color: #00bcd4; font-size: 14px; font-weight: 600;');
-        console.log('%c✨ Animations & Interactions Active!', 'color: #64ffda; font-size: 12px;');
+        console.log('%c✨ Sparkle Cursor Trail & Timeline Effects Active!', 'color: #64ffda; font-size: 12px;');
     </script>
 </body>
 </html>
