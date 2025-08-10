@@ -2664,46 +2664,57 @@
         let chatbotOpen = false;
         let hasInteracted = false;
         
-        // Knowledge base about Chandisha
-        const knowledgeBase = {
-            projects: {
-                'breast cancer': 'I developed an uncertainty-aware cross-modal attention model for breast cancer classification using ultrasound imaging and clinical data, achieving 90% accuracy and 98% recall on the Breast-Lesions-USG dataset.',
-                'violence detection': 'I led the development of a real-time violence detection system for public safety using advanced CCTV analytics, achieving 92.43% accuracy in threat detection.',
-                'pneumonia': 'I created an AI-powered diagnostic assistant for detecting pneumonia from chest X-ray images with 94.65% accuracy using optimized CNNs.',
-                'brain tumor': 'I worked on radiogenomic analysis for predicting MGMT promoter methylation in glioblastoma patients using multimodal MRI analysis.'
-            },
-            experience: {
-                'iit jodhpur': 'I am currently a Research Intern at IIT Jodhpur (February 2025 – July 2025) working on uncertainty-aware deep learning models for medical image analysis.',
-                'smart india hackathon': 'I was Team Lead & AI Developer at Smart India Hackathon 2024 Grand Finale, developing a comprehensive real-time violence detection system.',
-                'research': 'My research paper on uncertainty-aware deep learning in medical imaging was accepted at MICCAI 2025: 2nd Deep Breast.'
-            },
-            education: {
-                'college': 'I am pursuing B.Tech in Computer Science and Engineering at Future Institute of Technology, Rajpur, Sonarpur (August 2022 – June 2026).',
-                'school': 'I completed Higher Secondary Education at Nava Nalanda High School, Golpark (June 2019 – February 2021).'
-            },
-            skills: {
-                'programming': 'I am proficient in Python, C/C++, SQL, and JavaScript.',
-                'ai ml': 'I work with TensorFlow, PyTorch, Keras, Scikit-learn, and OpenCV for AI/ML projects.',
-                'specialization': 'I specialize in Computer Vision, Deep Learning, Medical AI, NLP, and Research.',
-                'tools': 'I use Flask, Git/GitHub, Docker, VS Code, and MediaPipe for development.'
-            },
-            contact: {
-                'email': 'You can reach me at daschandisha@gmail.com',
-                'phone': 'My phone number is +91 7439261382',
-                'location': 'I am based in Kolkata, West Bengal, India',
-                'linkedin': 'Find me on LinkedIn: https://www.linkedin.com/in/chandisha-das-3b67a6253/',
-                'github': 'Check out my GitHub: https://github.com/Chandisha',
-                'kaggle': 'My Kaggle profile: https://www.kaggle.com/chandisha'
-            }
-        };
+        // // Knowledge base about Chandisha
+        // const knowledgeBase = {
+        //     projects: {
+        //         'breast cancer': 'I developed an uncertainty-aware cross-modal attention model for breast cancer classification using ultrasound imaging and clinical data, achieving 90% accuracy and 98% recall on the Breast-Lesions-USG dataset.',
+        //         'violence detection': 'I led the development of a real-time violence detection system for public safety using advanced CCTV analytics, achieving 92.43% accuracy in threat detection.',
+        //         'pneumonia': 'I created an AI-powered diagnostic assistant for detecting pneumonia from chest X-ray images with 94.65% accuracy using optimized CNNs.',
+        //         'brain tumor': 'I worked on radiogenomic analysis for predicting MGMT promoter methylation in glioblastoma patients using multimodal MRI analysis.'
+        //     },
+        //     experience: {
+        //         'iit jodhpur': 'I am currently a Research Intern at IIT Jodhpur (February 2025 – July 2025) working on uncertainty-aware deep learning models for medical image analysis.',
+        //         'smart india hackathon': 'I was Team Lead & AI Developer at Smart India Hackathon 2024 Grand Finale, developing a comprehensive real-time violence detection system.',
+        //         'research': 'My research paper on uncertainty-aware deep learning in medical imaging was accepted at MICCAI 2025: 2nd Deep Breast.'
+        //     },
+        //     education: {
+        //         'college': 'I am pursuing B.Tech in Computer Science and Engineering at Future Institute of Technology, Rajpur, Sonarpur (August 2022 – June 2026).',
+        //         'school': 'I completed Higher Secondary Education at Nava Nalanda High School, Golpark (June 2019 – February 2021).'
+        //     },
+        //     skills: {
+        //         'programming': 'I am proficient in Python, C/C++, SQL, and JavaScript.',
+        //         'ai ml': 'I work with TensorFlow, PyTorch, Keras, Scikit-learn, and OpenCV for AI/ML projects.',
+        //         'specialization': 'I specialize in Computer Vision, Deep Learning, Medical AI, NLP, and Research.',
+        //         'tools': 'I use Flask, Git/GitHub, Docker, VS Code, and MediaPipe for development.'
+        //     },
+        //     contact: {
+        //         'email': 'You can reach me at daschandisha@gmail.com',
+        //         'phone': 'My phone number is +91 7439261382',
+        //         'location': 'I am based in Kolkata, West Bengal, India',
+        //         'linkedin': 'Find me on LinkedIn: https://www.linkedin.com/in/chandisha-das-3b67a6253/',
+        //         'github': 'Check out my GitHub: https://github.com/Chandisha',
+        //         'kaggle': 'My Kaggle profile: https://www.kaggle.com/chandisha'
+        //     }
+        // };
 
-        function findBestResponse(message) {
-            const lowerMessage = message.toLowerCase();
+        // function findBestResponse(message) {
+        //     const lowerMessage = message.toLowerCase();
             
-            // Greeting responses
-            if (lowerMessage.match(/\b(hi|hello|hey|greetings)\b/)) {
-                return "👋 Hello! I'm here to help you learn about Chandisha's work and experience. You can ask me about her projects, research, skills, or contact information.";
-            }
+        //     // Greeting responses
+        //     if (lowerMessage.match(/\b(hi|hello|hey|greetings)\b/)) {
+        //         return "👋 Hello! I'm here to help you learn about Chandisha's work and experience. You can ask me about her projects, research, skills, or contact information.";
+        //     }
+
+            <section id="chatbot" style="padding: 20px; text-align: center;">
+            <h2>Chat with My AI Assistant</h2>
+              <iframe 
+                src="https://chandisha-aibot.hf.space" 
+                width="100%" 
+                height="600" 
+                style="border:none; border-radius: 10px;">
+              </iframe>
+            </section>
+
             
             // Projects
             if (lowerMessage.includes('project')) {
@@ -2992,3 +3003,4 @@
     </script>
 </body>
 </html>
+
