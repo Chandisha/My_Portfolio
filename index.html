@@ -2663,31 +2663,68 @@
 
         // Replace the existing chatbot functionality in your portfolio with this code
 
-// FINAL ENHANCED CHATBOT FUNCTIONALITY WITH CORRECT GRADIO API INTEGRATION
+// FINAL ENHANCED CHATBOT FUNCTIONALITY WITH CORRECT API INTEGRATION
 let chatbotOpen = false;
 let hasInteracted = false;
 
-// Updated API configuration for your Gradio streaming endpoint
-const HF_SPACE_NAME = 'Chandisha/aibot';
-const HF_API_BASE = 'https://chandisha-aibot.hf.space/gradio_api/call';
-const HF_STREAM_BASE = 'https://chandisha-aibot.hf.space/gradio_api/call';
+// Updated configuration with your Vercel URL and correct HF Space URL
+const VERCEL_URL = 'https://my-portfolio-two-plum.vercel.app';
+const HF_SPACE_URL = 'https://chandisha-aibot.hf.space';
 
 // Chat history for maintaining conversation context
 let chatHistory = [];
 
-// Function to call your Hugging Face Gradio Streaming API
-
-// FIXED: Replace your callHuggingFaceAPI function with this one
+// Main function to call Hugging Face API with multiple endpoint fallbacks
 async function callHuggingFaceAPI(message) {
-    try {
-        console.log('🚀 Sending message to HF Gradio API:', message);
-        console.log('💬 Current chat history:', chatHistory);
+    const endpoints = [
+        // Try Gradio streaming API first (correct format for HF Spaces)
+        `${HF_SPACE_URL}/gradio_api/call/chat`,
+        // Fallback to standard predict API
+        `${HF_SPACE_URL}/api/predict`,
+        // Alternative direct endpoint
+        `${HF_SPACE_URL}/call/chat`,
+        // Additional fallback endpoint
+        `${HF_SPACE_URL}/predict`
+    ];
 
-        const eventResponse = await fetch(`${HUGGING_FACE_URL}/call/chat`, {
+    for (let i = 0; i < endpoints.length; i++) {
+        const endpoint = endpoints[i];
+        
+        try {
+            console.log(`🚀 Trying endpoint ${i + 1}/${endpoints.length}: ${endpoint}`);
+            
+            // For streaming endpoints, try the two-step process
+            if (endpoint.includes('gradio_api/call')) {
+                const response = await tryStreamingAPI(endpoint, message);
+                if (response) return response;
+            } else {
+                // For standard endpoints, try direct call
+                const response = await tryDirectAPI(endpoint, message);
+                if (response) return response;
+            }
+            
+        } catch (error) {
+            console.error(`❌ Error with endpoint ${i + 1}:`, error.message);
+            continue; // Try next endpoint
+        }
+    }
+
+    // If all endpoints fail, throw error to trigger fallback
+    throw new Error('All API endpoints failed');
+}
+
+// Try streaming API approach
+async function tryStreamingAPI(endpoint, message) {
+    try {
+        // Step 1: Initiate the streaming call
+        const eventResponse = await fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
+            mode: 'cors',
+            credentials: 'omit',
             body: JSON.stringify({
                 data: [message, chatHistory]
             })
@@ -2704,10 +2741,8 @@ async function callHuggingFaceAPI(message) {
             throw new Error('No event_id received');
         }
 
-        // Try streaming response
-        const streamUrl = `${HUGGING_FACE_URL}/call/chat/${eventData.event_id}`;
-        console.log('🌊 Stream URL:', streamUrl);
-
+        // Step 2: Get the streaming response
+        const streamUrl = `${endpoint}/${eventData.event_id}`;
         const streamResponse = await fetch(streamUrl);
         
         if (!streamResponse.ok) {
@@ -2719,91 +2754,103 @@ async function callHuggingFaceAPI(message) {
         let accumulatedData = '';
         let finalResponse = null;
 
-        console.log('📥 Starting to read stream...');
-
+        // Read the stream
         while (true) {
             const { done, value } = await reader.read();
             
-            if (done) {
-                console.log('✅ Stream finished');
-                break;
-            }
+            if (done) break;
 
             const chunk = decoder.decode(value, { stream: true });
             accumulatedData += chunk;
-            console.log('📦 Raw chunk received:', chunk);
 
-            // Process each complete line
+            // Process complete lines
             const lines = accumulatedData.split('\n');
-            accumulatedData = lines.pop() || ''; // Keep incomplete line for next iteration
+            accumulatedData = lines.pop() || '';
 
             for (const line of lines) {
                 const trimmedLine = line.trim();
                 if (!trimmedLine) continue;
 
-                console.log('🔍 Processing line:', trimmedLine);
-
                 try {
-                    // Handle different Gradio response formats
+                    // Handle different response formats
                     if (trimmedLine.startsWith('data: ')) {
-                        const jsonStr = trimmedLine.slice(6); // Remove 'data: '
-                        console.log('📋 Parsing JSON string:', jsonStr);
-                        
+                        const jsonStr = trimmedLine.slice(6);
                         const data = JSON.parse(jsonStr);
-                        console.log('📊 Parsed stream data:', data);
-
-                        // Extract response from different possible formats
-                        if (data.output && data.output.data) {
-                            // Format 1: {output: {data: [response]}}
-                            finalResponse = data.output.data[0];
-                            console.log('🎯 Format 1 - Response found:', finalResponse);
-                        } else if (Array.isArray(data) && data.length > 0) {
-                            // Format 2: [response, history]
-                            finalResponse = data[0];
-                            console.log('🎯 Format 2 - Response found:', finalResponse);
-                        } else if (data.data && Array.isArray(data.data)) {
-                            // Format 3: {data: [response, history]}
-                            finalResponse = data.data[0];
-                            console.log('🎯 Format 3 - Response found:', finalResponse);
-                        } else if (typeof data === 'string') {
-                            // Format 4: Direct string response
-                            finalResponse = data;
-                            console.log('🎯 Format 4 - Direct string response:', finalResponse);
-                        }
+                        finalResponse = extractResponse(data);
                     } else if (trimmedLine.startsWith('{')) {
-                        // Direct JSON without 'data: ' prefix
-                        console.log('📋 Parsing direct JSON:', trimmedLine);
                         const data = JSON.parse(trimmedLine);
-                        console.log('📊 Parsed direct data:', data);
-
-                        if (data.output && data.output.data) {
-                            finalResponse = data.output.data[0];
-                            console.log('🎯 Direct JSON - Response found:', finalResponse);
-                        }
+                        finalResponse = extractResponse(data);
                     }
                 } catch (parseError) {
-                    console.log('⚠️ Error parsing line:', trimmedLine, 'Error:', parseError.message);
+                    console.log('⚠️ Parse error:', parseError.message);
                 }
             }
         }
-
-        console.log('✅ Final response extracted:', finalResponse);
 
         if (finalResponse && typeof finalResponse === 'string' && finalResponse.trim()) {
             return finalResponse.trim();
         }
 
-        // If streaming parsing failed, try simple API call
-        console.log('🔄 Streaming parsing failed, trying simple API...');
-        return await trySimpleAPI(message);
+        throw new Error('No valid response from streaming API');
 
     } catch (error) {
-        console.error('❌ Hugging Face API error:', error);
-        return await trySimpleAPI(message);
+        console.error('❌ Streaming API error:', error);
+        throw error;
     }
 }
-// Enhanced fallback response function with better context awareness
-// Enhanced fallback response function with better context awareness
+
+// Try direct API approach
+async function tryDirectAPI(endpoint, message) {
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            mode: 'cors',
+            credentials: 'omit',
+            body: JSON.stringify({
+                data: [message, chatHistory]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        console.log('📊 Direct API Response:', result);
+
+        const finalResponse = extractResponse(result);
+        
+        if (finalResponse && typeof finalResponse === 'string' && finalResponse.trim()) {
+            return finalResponse.trim();
+        }
+
+        throw new Error('No valid response from direct API');
+
+    } catch (error) {
+        console.error('❌ Direct API error:', error);
+        throw error;
+    }
+}
+
+// Helper function to extract response from different data formats
+function extractResponse(data) {
+    if (data.output && data.output.data && Array.isArray(data.output.data)) {
+        return data.output.data[0];
+    } else if (Array.isArray(data) && data.length > 0) {
+        return data[0];
+    } else if (data.data && Array.isArray(data.data)) {
+        return data.data[0];
+    } else if (typeof data === 'string') {
+        return data;
+    }
+    return null;
+}
+
+// Enhanced fallback response function with comprehensive Chandisha knowledge base
 function getFallbackResponse(message) {
     const lowerMessage = message.toLowerCase();
     
@@ -2899,47 +2946,155 @@ function getRandomResponse(responseArray) {
     return responseArray[Math.floor(Math.random() * responseArray.length)];
 }
 
-// HELPER FUNCTION: Add this new function for simple API fallback
-async function trySimpleAPI(message) {
+// Enhanced send message function with better UX and error handling
+async function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (!message) {
+        // Shake animation for empty input
+        input.style.animation = 'shake 0.5s';
+        setTimeout(() => input.style.animation = '', 500);
+        return;
+    }
+
+    console.log('📤 User message:', message);
+
+    // Add user message to chat
+    addMessage(message, 'user');
+    input.value = '';
+    
+    // Add to chat history
+    chatHistory.push({role: "user", content: message});
+    
+    // Show typing indicator
+    showTypingIndicator();
+    
+    // Disable input while processing
+    input.disabled = true;
+    const sendButton = document.getElementById('sendButton');
+    if (sendButton) sendButton.disabled = true;
+    
+    // Update status
+    updateConnectionStatus('🔄 Processing...');
+    
     try {
-        console.log('🔄 Trying simple API approach...');
+        console.log('🤖 Getting AI response...');
         
-        const response = await fetch(`${HUGGING_FACE_URL}/api/predict`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                data: [message, chatHistory]
-            })
-        });
+        // Try API with timeout
+        const response = await Promise.race([
+            callHuggingFaceAPI(message),
+            new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Timeout')), 30000)
+            )
+        ]);
 
-        if (!response.ok) {
-            throw new Error(`Simple API failed: ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log('📊 Simple API result:', result);
-
-        if (result.data && Array.isArray(result.data) && result.data[0]) {
-            console.log('✅ Simple API success:', result.data[0]);
-            return result.data[0];
-        }
-
-        throw new Error('No valid response from simple API');
-
+        // Hide typing indicator
+        hideTypingIndicator();
+        
+        console.log('✅ API Response received:', response);
+        
+        // Add AI response to chat
+        addMessage(response, 'bot');
+        
+        // Add to chat history
+        chatHistory.push({role: "assistant", content: response});
+        
+        // Update status
+        updateConnectionStatus('🟢 Connected');
+        
     } catch (error) {
-        console.error('❌ Simple API error:', error);
-        console.log('💡 Falling back to offline knowledge base');
-        return getFallbackResponse(message);
+        console.error('💥 Error in sendMessage:', error);
+        
+        hideTypingIndicator();
+        
+        // Use fallback response
+        console.log('💡 Using fallback knowledge base');
+        const fallbackResponse = getFallbackResponse(message);
+        
+        addMessage(fallbackResponse, 'bot');
+        chatHistory.push({role: "assistant", content: fallbackResponse});
+        
+        // Update status based on error type
+        if (error.message.includes('Timeout')) {
+            updateConnectionStatus('⚠️ Slow connection - using offline mode');
+        } else {
+            updateConnectionStatus('🟡 Offline mode');
+        }
+        
+    } finally {
+        // Re-enable input
+        input.disabled = false;
+        if (sendButton) sendButton.disabled = false;
+        input.focus();
     }
 }
 
-// Helper function to get random response for variety
-function getRandomResponse(responseArray) {
-    return responseArray[Math.floor(Math.random() * responseArray.length)];
+// Enhanced UI helper functions
+function addMessage(text, sender) {
+    const messagesContainer = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}`;
+    
+    // Enhanced formatting for bot messages
+    if (sender === 'bot') {
+        messageDiv.innerHTML = text
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // Bold text
+            .replace(/\n\n/g, '<br><br>')  // Double line breaks
+            .replace(/\n/g, '<br>')  // Single line breaks
+            .replace(/• /g, '• ')  // Bullet points
+            .replace(/(🔬|🎯|📊|🔧|📋|🏆|💡|🐍|🧠|👁️|📊|🌐|🔧|📞|🔗|💼|🏆|🛡️|📹|🚨|🫁|⚡|🏥|🤖|🎓|💻)/g, '<span class="emoji">$1</span>'); // Highlight emojis
+    } else {
+        messageDiv.textContent = text;
+    }
+    
+    messagesContainer.appendChild(messageDiv);
+    
+    // Animate message appearance
+    messageDiv.style.opacity = '0';
+    messageDiv.style.transform = 'translateY(10px)';
+    setTimeout(() => {
+        messageDiv.style.transition = 'opacity 0.3s, transform 0.3s';
+        messageDiv.style.opacity = '1';
+        messageDiv.style.transform = 'translateY(0)';
+    }, 10);
+    
+    scrollChatToBottom();
 }
 
+function showTypingIndicator() {
+    const indicator = document.getElementById('typingIndicator');
+    if (indicator) {
+        indicator.style.display = 'block';
+        scrollChatToBottom();
+    }
+}
+
+function hideTypingIndicator() {
+    const indicator = document.getElementById('typingIndicator');
+    if (indicator) {
+        indicator.style.display = 'none';
+    }
+}
+
+function scrollChatToBottom() {
+    const messagesContainer = document.getElementById('chatMessages');
+    if (messagesContainer) {
+        setTimeout(() => {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }, 100);
+    }
+}
+
+function updateConnectionStatus(status) {
+    const statusElement = document.getElementById('connectionStatus');
+    if (statusElement) {
+        statusElement.textContent = status;
+    }
+    console.log('📡 Status:', status);
+}
+
+// Chatbot toggle functions
 function toggleChatbot() {
     const popup = document.getElementById('chatbotPopup');
     const badge = document.getElementById('notificationBadge');
@@ -2952,7 +3107,7 @@ function toggleChatbot() {
         hasInteracted = true;
         
         // Update status
-        updateConnectionStatus('🟢 Connected to AI Assistant');
+        updateConnectionStatus('🟡 Initializing...');
         
         setTimeout(() => {
             const chatInput = document.getElementById('chatInput');
@@ -2960,7 +3115,8 @@ function toggleChatbot() {
                 chatInput.focus();
                 scrollChatToBottom();
             }
-        }, 300);
+            updateConnectionStatus('🟢 Ready to chat');
+        }, 500);
         
     } else {
         closeChatbot();
@@ -2973,144 +3129,43 @@ function closeChatbot() {
     chatbotOpen = false;
 }
 
-// FIXED: Replace your sendMessage function with this one
-async function sendMessage() {
-    const input = document.getElementById('messageInput');
-    const message = input.value.trim();
+// Enhanced event listeners and initialization
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🤖 Enhanced Chatbot Integration Loaded Successfully!');
+    console.log('🔗 Vercel URL:', VERCEL_URL);
+    console.log('🌐 HF Space URL:', HF_SPACE_URL);
+    console.log('📡 API Endpoints configured for Gradio streaming and direct calls');
     
-    if (!message) return;
-
-    console.log('📤 User message:', message);
-
-    // Add user message to chat
-    addMessage(message, 'user');
-    input.value = '';
-    
-    // Add user message to history
-    chatHistory.push({role: "user", content: message});
-    
-    // Show typing indicator
-    showTypingIndicator();
-    
-    try {
-        console.log('🤖 Getting AI response...');
-        let response;
-
-        if (USE_HUGGING_FACE_API) {
-            console.log('🎯 Using Hugging Face API');
-            response = await callHuggingFaceAPI(message);
-        }
-
-        // If no response from API, use fallback
-        if (!response || response.trim() === '') {
-            console.log('💡 Using offline knowledge base');
-            response = getFallbackResponse(message);
-        }
-
-        // Remove typing indicator
-        hideTypingIndicator();
+    const chatInput = document.getElementById('chatInput');
+    if (chatInput) {
+        // Enter key handler
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey && !this.disabled) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
         
-        console.log('✅ Final response to display:', response);
+        // Dynamic placeholder animation
+        let placeholderIndex = 0;
+        const placeholders = [
+            "Ask about Chandisha's research at IIT Jodhpur...",
+            "What are her AI/ML projects?",
+            "Tell me about her MICCAI 2025 paper...",
+            "What technologies does she use?",
+            "How can I contact her?"
+        ];
         
-        // Add AI response to chat
-        addMessage(response, 'assistant');
-        
-        // Add AI response to history
-        chatHistory.push({role: "assistant", content: response});
-        
-        console.log('📚 Updated chat history:', chatHistory);
-        
-    } catch (error) {
-        console.error('💥 Error in sendMessage:', error);
-        hideTypingIndicator();
-        
-        // Fallback to offline response
-        const fallbackResponse = getFallbackResponse(message);
-        addMessage(fallbackResponse, 'assistant');
-        chatHistory.push({role: "assistant", content: fallbackResponse});
+        setInterval(() => {
+            if (!chatInput.value && document.activeElement !== chatInput) {
+                chatInput.placeholder = placeholders[placeholderIndex];
+                placeholderIndex = (placeholderIndex + 1) % placeholders.length;
+            }
+        }, 3000);
     }
-}
-
-function addMessage(text, sender) {
-    const messagesContainer = document.getElementById('chatMessages');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}`;
-    messageDiv.textContent = text;
     
-    messagesContainer.appendChild(messageDiv);
-    
-    setTimeout(() => {
-        scrollChatToBottom();
-    }, 50);
-}
-
-function addBotMessage(text) {
-    const messagesContainer = document.getElementById('chatMessages');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message bot';
-    
-    // Enhanced formatting for bot messages with better rendering
-    const formattedText = text
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // Bold text
-        .replace(/• /g, '• ')  // Bullet points
-        .replace(/\n\n/g, '<br><br>')  // Double line breaks
-        .replace(/\n/g, '<br>')  // Single line breaks
-        .replace(/🔬|🎯|📊|🔧|📋|🏆|💡|🐍|🧠|👁️|📊|🌐|🔧|📞|🔗|💼|🏆|🛡️|📹|🚨|🫁|⚡|🏥|🤖|🎓|💻/g, '<span class="emoji">$&</span>'); // Highlight emojis
-    
-    messageDiv.innerHTML = formattedText;
-    messagesContainer.appendChild(messageDiv);
-    
-    setTimeout(() => {
-        scrollChatToBottom();
-    }, 50);
-}
-
-function scrollChatToBottom() {
-    const messagesContainer = document.getElementById('chatMessages');
-    if (messagesContainer) {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-}
-
-function showTypingIndicator() {
-    const typingIndicator = document.getElementById('typingIndicator');
-    const messagesContainer = document.getElementById('chatMessages');
-    
-    if (typingIndicator && messagesContainer) {
-        typingIndicator.style.display = 'block';
-        messagesContainer.appendChild(typingIndicator);
-        
-        setTimeout(() => {
-            scrollChatToBottom();
-        }, 50);
-    }
-}
-
-function hideTypingIndicator() {
-    const typingIndicator = document.getElementById('typingIndicator');
-    if (typingIndicator) {
-        typingIndicator.style.display = 'none';
-    }
-}
-
-function updateConnectionStatus(status) {
-    const statusElement = document.getElementById('connectionStatus');
-    if (statusElement) {
-        statusElement.textContent = status;
-    }
-    console.log('📡 Status:', status);
-}
-
-// Enhanced enter key handling with better error checking
-const chatInput = document.getElementById('chatInput');
-if (chatInput) {
-    chatInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey && !this.disabled) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-}
+    updateConnectionStatus('🟢 Ready to chat');
+});
 
 // Initialize notification system
 setTimeout(() => {
@@ -3145,25 +3200,66 @@ document.addEventListener('click', () => {
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && chatbotOpen) {
+        closeChatbot();
+    }
+    if (e.ctrlKey && e.key === 'k') {
+        e.preventDefault();
+        toggleChatbot();
+    }
     if (e.ctrlKey && e.key === '/') {
         e.preventDefault();
         toggleChatbot();
     }
-    if (e.key === 'Escape' && chatbotOpen) {
-        closeChatbot();
-    }
 });
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🤖 Enhanced Chatbot Integration Loaded Successfully!');
-    console.log('🔗 Primary API: Gradio streaming endpoint');
-    console.log('💡 Fallback system: Enhanced knowledge base');
-    console.log('📡 API Base:', HF_API_BASE);
+// Add CSS for animations and styling
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
     
-    // Test initial connection
-    updateConnectionStatus('🟢 Ready to chat');
-});
+    .emoji {
+        font-size: 1.1em;
+        vertical-align: middle;
+        margin: 0 1px;
+    }
+    
+    .message {
+        margin-bottom: 10px;
+        padding: 10px 15px;
+        border-radius: 15px;
+        max-width: 80%;
+        word-wrap: break-word;
+    }
+    
+    .message.user {
+        background: #007bff;
+        color: white;
+        align-self: flex-end;
+        margin-left: auto;
+    }
+    
+    .message.bot {
+        background: #f1f1f1;
+        color: #333;
+        align-self: flex-start;
+    }
+    
+    .message strong {
+        font-weight: 600;
+    }
+    
+    @keyframes chatbotPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+`;
+document.head.appendChild(style);
     </script>
 </body>
 </html>
