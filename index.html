@@ -2665,8 +2665,331 @@
         let hasInteracted = false;
         
         // Knowledge base about Chandisha
-        // Static chatbot removed; now using Hugging Face iframe.
-</script>
+        const knowledgeBase = {
+            projects: {
+                'breast cancer': 'I developed an uncertainty-aware cross-modal attention model for breast cancer classification using ultrasound imaging and clinical data, achieving 90% accuracy and 98% recall on the Breast-Lesions-USG dataset.',
+                'violence detection': 'I led the development of a real-time violence detection system for public safety using advanced CCTV analytics, achieving 92.43% accuracy in threat detection.',
+                'pneumonia': 'I created an AI-powered diagnostic assistant for detecting pneumonia from chest X-ray images with 94.65% accuracy using optimized CNNs.',
+                'brain tumor': 'I worked on radiogenomic analysis for predicting MGMT promoter methylation in glioblastoma patients using multimodal MRI analysis.'
+            },
+            experience: {
+                'iit jodhpur': 'I am currently a Research Intern at IIT Jodhpur (February 2025 – July 2025) working on uncertainty-aware deep learning models for medical image analysis.',
+                'smart india hackathon': 'I was Team Lead & AI Developer at Smart India Hackathon 2024 Grand Finale, developing a comprehensive real-time violence detection system.',
+                'research': 'My research paper on uncertainty-aware deep learning in medical imaging was accepted at MICCAI 2025: 2nd Deep Breast.'
+            },
+            education: {
+                'college': 'I am pursuing B.Tech in Computer Science and Engineering at Future Institute of Technology, Rajpur, Sonarpur (August 2022 – June 2026).',
+                'school': 'I completed Higher Secondary Education at Nava Nalanda High School, Golpark (June 2019 – February 2021).'
+            },
+            skills: {
+                'programming': 'I am proficient in Python, C/C++, SQL, and JavaScript.',
+                'ai ml': 'I work with TensorFlow, PyTorch, Keras, Scikit-learn, and OpenCV for AI/ML projects.',
+                'specialization': 'I specialize in Computer Vision, Deep Learning, Medical AI, NLP, and Research.',
+                'tools': 'I use Flask, Git/GitHub, Docker, VS Code, and MediaPipe for development.'
+            },
+            contact: {
+                'email': 'You can reach me at daschandisha@gmail.com',
+                'phone': 'My phone number is +91 7439261382',
+                'location': 'I am based in Kolkata, West Bengal, India',
+                'linkedin': 'Find me on LinkedIn: https://www.linkedin.com/in/chandisha-das-3b67a6253/',
+                'github': 'Check out my GitHub: https://github.com/Chandisha',
+                'kaggle': 'My Kaggle profile: https://www.kaggle.com/chandisha'
+            }
+        };
+
+        function findBestResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Greeting responses
+            if (lowerMessage.match(/\b(hi|hello|hey|greetings)\b/)) {
+                return "👋 Hello! I'm here to help you learn about Chandisha's work and experience. You can ask me about her projects, research, skills, or contact information.";
+            }
+            
+            // Projects
+            if (lowerMessage.includes('project')) {
+                return "🔬 Chandisha has worked on several exciting projects:\n\n• Breast Cancer Classification (90% accuracy)\n• Real-time Violence Detection System (92.43% accuracy)\n• Pneumonia Detection (94.65% accuracy)\n• Brain Tumor Analysis for MICCAI challenge\n\nWhich project would you like to know more about?";
+            }
+            
+            if (lowerMessage.match(/\b(breast cancer|cancer|medical|ultrasound)\b/)) {
+                return knowledgeBase.projects['breast cancer'] + "\n\n🏆 This work led to a paper acceptance at MICCAI 2025!";
+            }
+            
+            if (lowerMessage.match(/\b(violence|detection|safety|cctv)\b/)) {
+                return knowledgeBase.projects['violence detection'] + "\n\n🎯 This was developed during Smart India Hackathon 2024 Grand Finale.";
+            }
+            
+            if (lowerMessage.match(/\b(pneumonia|lung|xray|x-ray)\b/)) {
+                return knowledgeBase.projects['pneumonia'] + "\n\n🏥 This system is designed to be clinical-ready for healthcare applications.";
+            }
+            
+            if (lowerMessage.match(/\b(brain|tumor|mri|radiogenomic)\b/)) {
+                return knowledgeBase.projects['brain tumor'] + "\n\n🧠 This project involved sophisticated CNN architectures for advanced medical analysis.";
+            }
+            
+            // Experience
+            if (lowerMessage.match(/\b(experience|work|job|internship)\b/)) {
+                return "💼 Chandisha's professional experience:\n\n🔬 Research Intern at IIT Jodhpur (Feb 2025 - Jul 2025)\n🏆 Team Lead at Smart India Hackathon 2024\n📄 Published researcher at MICCAI 2025\n\nShe's passionate about AI in healthcare!";
+            }
+            
+            if (lowerMessage.match(/\b(iit|jodhpur|research intern)\b/)) {
+                return knowledgeBase.experience['iit jodhpur'] + "\n\n🎓 This is where she's making significant contributions to medical AI research.";
+            }
+            
+            // Skills
+            if (lowerMessage.match(/\b(skill|technology|programming|language)\b/)) {
+                return "🚀 Chandisha's technical skills:\n\n💻 Programming: Python, C/C++, SQL, JavaScript\n🧠 AI/ML: TensorFlow, PyTorch, Keras, OpenCV\n📊 Data Science: Pandas, NumPy, Matplotlib\n🔧 Tools: Flask, Git, Docker, VS Code\n\nHer specialty is in Medical AI and Computer Vision!";
+            }
+            
+            // Education
+            if (lowerMessage.match(/\b(education|study|college|university|degree)\b/)) {
+                return "🎓 Chandisha's educational background:\n\n" + knowledgeBase.education['college'] + "\n\n" + knowledgeBase.education['school'];
+            }
+            
+            // Contact
+            if (lowerMessage.match(/\b(contact|email|phone|reach|connect)\b/)) {
+                return "📞 Here's how you can connect with Chandisha:\n\n📧 " + knowledgeBase.contact['email'] + "\n📱 " + knowledgeBase.contact['phone'] + "\n📍 " + knowledgeBase.contact['location'] + "\n\n🔗 Social Links:\n• LinkedIn: " + knowledgeBase.contact['linkedin'] + "\n• GitHub: " + knowledgeBase.contact['github'];
+            }
+            
+            // Research
+            if (lowerMessage.match(/\b(research|paper|publication|miccai)\b/)) {
+                return "📄 Chandisha's research achievements:\n\n🏆 Paper accepted at MICCAI 2025: 2nd Deep Breast\n🔬 Research focus: Uncertainty-aware deep learning in medical imaging\n🎯 Specialization: Healthcare AI and Computer Vision\n\nHer work combines technical innovation with real-world medical applications!";
+            }
+            
+            // Achievements
+            if (lowerMessage.match(/\b(achievement|award|recognition|accomplishment)\b/)) {
+                return "🏆 Chandisha's key achievements:\n\n📄 Published paper at MICCAI 2025\n🥇 Smart India Hackathon 2024 Grand Finalist\n🎯 90% accuracy in breast cancer classification\n⚡ 92.43% accuracy in violence detection\n🏥 94.65% accuracy in pneumonia detection\n\nShe's making real impact in AI and healthcare!";
+            }
+            
+            // Default response
+            const responses = [
+                "🤔 That's an interesting question! You can ask me about Chandisha's projects, research, experience, skills, or how to contact her.",
+                "💡 I can help you learn about Chandisha's work in AI/ML, her research at IIT Jodhpur, or her exciting projects in medical AI.",
+                "🚀 Feel free to ask about any aspect of Chandisha's portfolio - from her technical skills to her published research!"
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        function toggleChatbot() {
+            const popup = document.getElementById('chatbotPopup');
+            const badge = document.getElementById('notificationBadge');
+            
+            chatbotOpen = !chatbotOpen;
+            
+            if (chatbotOpen) {
+                popup.classList.add('active');
+                badge.style.display = 'none';
+                hasInteracted = true;
+                
+                // Focus on input and scroll to bottom
+                setTimeout(() => {
+                    document.getElementById('chatInput').focus();
+                    scrollChatToBottom();
+                }, 300);
+                
+            } else {
+                closeChatbot();
+            }
+        }
+        
+        function closeChatbot() {
+            const popup = document.getElementById('chatbotPopup');
+            popup.classList.remove('active');
+            chatbotOpen = false;
+        }
+        
+        // FIXED: Enhanced message sending with proper scrolling
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Simulate AI response delay with more realistic timing
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = findBestResponse(message);
+                addMessage(response, 'bot');
+            }, 800 + Math.random() * 1200);
+        }
+        
+        // FIXED: Enhanced message addition with proper scrolling
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.textContent = text;
+            
+            messagesContainer.appendChild(messageDiv);
+            
+            // Ensure scroll to bottom after message is added
+            setTimeout(() => {
+                scrollChatToBottom();
+            }, 50);
+        }
+        
+        // FIXED: Proper scroll to bottom function
+        function scrollChatToBottom() {
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            const messagesContainer = document.getElementById('chatMessages');
+            
+            typingIndicator.style.display = 'block';
+            messagesContainer.appendChild(typingIndicator);
+            
+            setTimeout(() => {
+                scrollChatToBottom();
+            }, 50);
+        }
+        
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            typingIndicator.style.display = 'none';
+        }
+        
+        // Enhanced enter key handling
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // Enhanced notification system
+        setTimeout(() => {
+            if (!hasInteracted) {
+                const badge = document.getElementById('notificationBadge');
+                badge.style.display = 'flex';
+                
+                const toggle = document.getElementById('chatbotToggle');
+                toggle.style.animation = 'chatbotPulse 1s infinite';
+            }
+        }, 4000);
+        
+        // Hide notification on any user interaction
+        document.addEventListener('click', () => {
+            if (!hasInteracted) {
+                hasInteracted = true;
+                const badge = document.getElementById('notificationBadge');
+                badge.style.display = 'none';
+                
+                const toggle = document.getElementById('chatbotToggle');
+                toggle.style.animation = 'chatbotPulse 3s infinite';
+            }
+        });
+        
+        // Enhanced keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === '/') {
+                e.preventDefault();
+                toggleChatbot();
+            }
+            if (e.key === 'Escape' && chatbotOpen) {
+                closeChatbot();
+            }
+        });
+
+        // Enhanced mouse tracking for project cards
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.project-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                card.style.setProperty('--x', x + '%');
+                card.style.setProperty('--y', y + '%');
+            });
+        });
+
+        // Enhanced parallax effect for hero section
+        function handleParallax() {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            const heroContent = document.querySelector('.hero-content');
+            const heroImage = document.querySelector('.hero-image');
+            
+            if (hero && scrolled < window.innerHeight) {
+                heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+                heroImage.style.transform = `translateY(${scrolled * 0.2}px)`;
+            }
+        }
+
+        // Enhanced scroll event handler
+        let ticking = false;
+        function handleScroll() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateScrollProgress();
+                    handleNavScroll();
+                    handleParallax();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        // Initialize all functions
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            loadTheme();
+            setTimeout(typeWriter, 2000);
+            
+            // Enhanced desktop mode detection
+            function checkDeviceMode() {
+                const warning = document.getElementById('desktopWarning');
+                if (!warning) return;
+
+                warning.style.display = 'none';
+                warning.classList.remove('fade-out');
+
+                if (window.innerWidth <= 768) {
+                    warning.style.display = 'block';
+                    setTimeout(() => {
+                        warning.classList.add('fade-out');
+                    }, 3000);
+                    setTimeout(() => {
+                        warning.style.display = 'none';
+                        warning.classList.remove('fade-out');
+                    }, 3500);
+                }
+            }
+
+            checkDeviceMode();
+            window.addEventListener('resize', checkDeviceMode);
+
+            // Enhanced event listeners
+            window.addEventListener('scroll', handleScroll);
+            
+            // Initialize scroll state
+            handleNavScroll();
+            updateScrollProgress();
+            
+            // Enhanced chatbot initialization
+            const chatMessages = document.getElementById('chatMessages');
+            if (chatMessages) {
+                // Ensure initial scroll position
+                setTimeout(() => {
+                    scrollChatToBottom();
+                }, 100);
+            }
+        });
+
+        // Enhanced console messages
+        console.log('%c🚀 Enhanced Portfolio with Cursor Trail Loaded!', 'color: #64ffda; font-size: 18px; font-weight: bold; text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);');
+        console.log('%c🤖 AI Assistant Ready with Enhanced Scrolling!', 'color: #00bcd4; font-size: 14px; font-weight: 600;');
+        console.log('%c✨ Sparkle Cursor Trail & Timeline Effects Active!', 'color: #64ffda; font-size: 12px;');
+    </script>
 </body>
 </html>
 
