@@ -415,11 +415,19 @@ body.light-mode .social-link::before {
 
 body.light-mode .contact-form-section {
     background: linear-gradient(135deg, rgba(248, 245, 255, 0.95) 0%, rgba(243, 232, 255, 0.9) 50%, rgba(237, 220, 255, 0.85) 100%);
+    color: #2d1b69;
     border: 1px solid rgba(139, 92, 246, 0.2);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
 }
 
 body.light-mode .contact-form-section::before {
     background: linear-gradient(90deg, #7c3aed, #8b5cf6);
+}
+
+body.light-mode .contact-form-section:hover {
+    border-color: rgba(124, 58, 237, 0.35);
+    box-shadow: 0 15px 40px rgba(139, 92, 246, 0.22);
+    background: linear-gradient(135deg, rgba(245, 243, 255, 0.98) 0%, rgba(237, 233, 254, 0.95) 50%, rgba(230, 221, 255, 0.9) 100%);
 }
 
 body.light-mode .contact-form-section h3 {
@@ -1449,7 +1457,97 @@ body.light-mode .image-container:hover::before {
         .social-link.github:hover::before {
             background: #20beff;
         }
+        
+        .contact-form-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 18px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
 
+        .contact-form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #64ffda, #00bcd4);
+            transform: scaleX(0);
+            transition: transform 0.6s ease;
+        }
+
+        .contact-form-section:hover {
+            transform: translateY(-12px) scale(1.03) rotate(1deg);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            border-color: rgba(100, 255, 218, 0.2);
+        }
+
+        .contact-form-section:hover::before {
+            transform: scaleX(1);
+        }
+
+        .contact-form-section h3 {
+            color: #64ffda;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form-section p {
+            color: #b0b0b0;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form-section:hover h3 {
+            transform: scale(1.05);
+            text-shadow: 0 0 15px rgba(100, 255, 218, 0.6);
+        }
+
+        .contact-form-section:hover p {
+            color: #ffffff;
+        }
+
+        .availability-badge {
+            background: rgba(100, 255, 218, 0.12);
+            color: #64ffda;
+            border: 1px solid rgba(100, 255, 218, 0.25);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .availability-badge:hover {
+            background: rgba(100, 255, 218, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.2);
+        }
+
+        .availability-dot {
+            width: 8px;
+            height: 8px;
+            background: #64ffda;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
         /* Scroll Progress Bar */
         .scroll-progress {
             position: fixed;
