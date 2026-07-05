@@ -3,103 +3,636 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chandisha Das | AI/ML Engineer</title>
+    <title>Chandisha Das | AI/ML Engineer & Researcher</title>
+    <link href="https://fonts.googleapis.com/css?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Soothing Color Palette */
         :root {
-            --bg-cream: #faf9f6;
-            --text-dark: #2d2d2d;
-            --accent-soft: #dcd0c0;
-            --white: #ffffff;
+            --bg-main: #fafafa;
+            --bg-card: #ffffff;
+            --text-main: #111111;
+            --text-muted: #555555;
+            --accent: #2563eb;
+            --border: #e5e7eb;
+            --max-width: 900px;
         }
-        body { 
-            font-family: 'Georgia', serif; 
-            background-color: var(--white); 
-            color: var(--text-dark); 
-            line-height: 1.8; 
-            margin: 0; 
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container { max-width: 800px; margin: 0 auto; padding: 4rem 2rem; }
-        
-        /* Typography */
-        h1, h2 { font-family: 'Helvetica Neue', sans-serif; font-weight: 300; letter-spacing: 1px; }
-        .hero { text-align: center; margin-bottom: 5rem; }
-        
-        /* Layout Elements */
-        .section { margin-bottom: 4rem; }
-        .card { 
-            background: var(--bg-cream); 
-            padding: 2rem; 
-            border-radius: 4px; 
-            margin-bottom: 1.5rem; 
-            border-left: 4px solid var(--accent-soft);
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 0 1.5rem;
         }
-        .tag { 
-            display: inline-block; 
-            background: var(--white); 
-            padding: 0.2rem 0.8rem; 
-            border: 1px solid var(--accent-soft);
-            font-size: 0.8rem; 
-            margin: 0.3rem; 
-            border-radius: 50px;
+
+        /* Header / Navigation */
+        nav {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
         }
-        a { color: var(--text-dark); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .btn-resume {
+            border: 1px solid var(--text-main);
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-resume:hover {
+            background: var(--text-main);
+            color: var(--bg-card) !important;
+        }
+
+        /* Container */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 5rem;
+        }
+
+        .hero-text h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-desc {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .social-icons a {
+            color: var(--text-main);
+            font-size: 1.3rem;
+            transition: color 0.2s;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent);
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .hero-image img {
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--bg-card);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .interests-box {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        /* Cards Layout */
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: border-color 0.2s;
+        }
+
+        .card:hover {
+            border-color: #cbd5e1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .card-org {
+            color: var(--accent);
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-top: 0.2rem;
+        }
+
+        .card-date {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            background: var(--bg-main);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .card-body ul {
+            list-style: none;
+        }
+
+        .card-body li {
+            position: relative;
+            padding-left: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .card-body li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .inline-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-left: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .inline-link:hover {
+            text-decoration: underline;
+        }
+
+        .metrics-bar {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+            background: var(--bg-main);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: var(--bg-main);
+            color: var(--text-muted);
+            padding: 0.2rem 0.6rem;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        /* Skills Layout */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .skill-category {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .skill-category h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .skill-item {
+            background: var(--bg-main);
+            font-size: 0.85rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            color: var(--text-muted);
+        }
+
+        /* Contact Details Minimal */
+        .contact-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .contact-box p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-meta span {
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-image {
+                justify-content: center;
+                order: -1;
+            }
+            .card-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header class="hero">
-        <h1>Chandisha Das</h1>
-        <p>AI/ML Engineer & Research Enthusiast</p>
-    </header>
+    <nav>
+        <div class="logo">CD.</div>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#experience">Experience</a>
+            <a href="#projects">Projects</a>
+            <a href="#publications">Publications</a>
+            <a href="#skills">Skills</a>
+            <a href="https://drive.google.com/file/d/1mXYN7M_K80hluP3Z-VHSXZ8D1038Kzvk/view?usp=sharing" target="_blank" class="btn-resume">Resume</a>
+        </div>
+    </nav>
 
-    <section class="section">
-        <h2>About</h2>
-        <p>Final-year Computer Science Engineering student at Future Institute of Technology. I specialize in Computer Vision, Medical AI, and Deep Learning, focused on bridging the gap between research and real-world impact.</p>
-    </section>
+    <div class="container">
+        
+        <!-- Hero Section -->
+        <section class="hero" id="about">
+            <div class="hero-text">
+                <h1>Chandisha Das</h1>
+                <div class="hero-subtitle">AI/ML Engineer & Research Enthusiast</div>
+                <p class="hero-desc">
+                    Final-year Computer Science Engineering student at Future Institute of Technology. Specializing in Computer Vision, Medical AI, and Deep Learning. Focused on bridging the gap between advanced research frameworks and high-performance, real-world deployment.
+                </p>
+                <div class="social-icons">
+                    <a href="mailto:daschandisha@gmail.com"><i class="fas fa-envelope"></i></a>
+                    <a href="https://www.linkedin.com/in/chandisha-das-3b67a6253/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/Chandisha" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="assets/image.jpg" alt="Chandisha Das">
+            </div>
+        </section>
 
-    <section class="section">
-        <h2>Experience</h2>
-        <div class="card">
-            <h3>Research Intern | IIT Delhi</h3>
-            <p><em>Neurocomputing Lab | July 2026 - Present</em></p>
-        </div>
-        <div class="card">
-            <h3>Computer Vision & AI Intern | Renata Envirocom</h3>
-            <p><em>Sept 2025 - Apr 2026</em>[cite: 3]</p>
-            <p>Deployed YOLOv8/v11 pipelines and developed an AI Meeting Assistant using RAG[cite: 3].</p>
-        </div>
-        <div class="card">
-            <h3>Research Intern | NRSC, ISRO</h3>
-            <p><em>Nov 2025 - Feb 2026</em>[cite: 3]</p>
-            <p>Developed hybrid CNN-LSTM architectures for anomaly detection in surveillance[cite: 3].</p>
-        </div>
-    </section>
+        <!-- Research Interests Section -->
+        <section>
+            <h2>Research Interests</h2>
+            <div class="interests-box">
+                Applying AI in healthcare, multimodal learning, medical imaging, and neurocomputing for futuristic medical care.
+            </div>
+        </section>
 
-    <section class="section">
-        <h2>Publications</h2>
-        <div class="card">
-            <h3>Uncertainty-Aware Cross-Modal Attention for Breast Cancer Classification</h3>
-            <p><strong>MICCAI DeepBreath 2025</strong>[cite: 3]</p>
-            <p>An architecture fusing ultrasound and clinical records via a Clinical Knowledge Gate, achieving 90% accuracy[cite: 3].</p>
-        </div>
-    </section>
+        <!-- Experience Section -->
+        <section id="experience">
+            <h2>Experience</h2>
+            <div class="card-list">
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Research Intern</div>
+                            <div class="card-org">Neurocomputing Lab, Indian Institute of Technology Delhi</div>
+                        </div>
+                        <div class="card-date">July 2026 – Ongoing</div>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Conducting core research implementations at the intersection of deep learning and computational neuroscience frameworks.</li>
+                        </ul>
+                    </div>
+                </div>
 
-    <section class="section">
-        <h2>Featured Projects</h2>
-        <div class="card">
-            <h3>Notes AI: Meeting Intelligence</h3>
-            <p>Intelligent assistant using Whisper, Ollama, and ChromaDB[cite: 3].</p>
-            <span class="tag">FastAPI</span><span class="tag">RAG</span><span class="tag">Ollama</span>
-        </div>
-        <div class="card">
-            <h3>ISRO Campus Anomaly Detection</h3>
-            <p>Real-time surveillance using ResNet-18 and YOLOv11[cite: 3].</p>
-            <span class="tag">YOLOv11</span><span class="tag">Computer Vision</span>
-        </div>
-    </section>
-</div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Computer Vision & AI Intern</div>
+                            <div class="card-org">Renata Envirocom Pvt. Ltd. | Remote</div>
+                        </div>
+                        <div class="card-date">Sept. 2025 – Apr. 2026</div>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Deployed object detection pipelines using YOLOv8 and YOLOv11 for real-time dual class inference. Achieved 90.4% mAP50 accuracy and 25+ FPS performance while reducing latency by 40%.</li>
+                            <li>Built an AI Meeting Assistant featuring Zoom/Calendar synchronization, live Speech-to-Text (STT), automated Minutes of Meeting (MoM) generation, and a local Ollama architecture fallback engine. Implemented vector indexing through ChromaDB RAG to allow real-time query flows. <a href="https://drive.google.com/file/d/1vJbexX1O287gtb5oU057MC6eHDCE6D2W/view?usp=drive_link" target="_blank" class="inline-link"><i class="fas fa-certificate"></i> Certificate</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Research Intern</div>
+                            <div class="card-org">National Remote Sensing Centre (NRSC), ISRO | Hyderabad, India</div>
+                        </div>
+                        <div class="card-date">Nov. 2025 – Feb. 2026</div>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Engineered a Campus CCTV Surveillance System utilizing YOLO and ResNet-18 to extract temporal features across 2500+ security frames for multi-class anomaly identification, executing processing smoothly at 30 FPS. <a href="https://drive.google.com/file/d/1Kr7NOlRAWKIU5Hj--JnZEuiDPr3q8_ps/view?usp=drive_link" target="_blank" class="inline-link"><i class="fas fa-certificate"></i> Certificate</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Research Intern</div>
+                            <div class="card-org">Indian Institute of Technology Jodhpur | Jodhpur, India</div>
+                        </div>
+                        <div class="card-date">Feb. 2025 – Jul. 2025</div>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Designed deep learning networks for multimodal fusion of ultrasound images and clinical records via a Clinical Knowledge Gate (CKG), processing 3000+ patient records with 15% improved diagnostic accuracy. Resulted in a classification research paper accepted at MICCAI DeepBreath 2025. <a href="https://drive.google.com/file/d/1nhKRZ7bm0pxmHwKQXU9sfn0JYRVSGhbL/view?usp=drive_link" target="_blank" class="inline-link"><i class="fas fa-certificate"></i> Certificate</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <h2>Featured Projects</h2>
+            <div class="card-list">
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Notes AI: Meeting Intelligence</div>
+                            <div class="card-org">Corporate AI Voice Assistant</div>
+                        </div>
+                        <a href="https://github.com/Chandisha/RENATA_Notes_AI" target="_blank" class="inline-link"><i class="fab fa-github"></i> Repository</a>
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tag">FastAPI</span><span class="tag">Gemini 2.5 Flash</span><span class="tag">Ollama</span><span class="tag">Whisper</span><span class="tag">ChromaDB</span>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Developed a corporate assistant combining Whisper STT and NVIDIA NeMo diarization with a local fallback framework (Ollama deployments of Llama/Qwen) and ChromaDB vector indexing for fast semantic search. Target performance focuses on sub-2-second response thresholds.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">ISRO Campus Anomaly Detection</div>
+                            <div class="card-org">Real-Time Computer Vision Analytics</div>
+                        </div>
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tag">YOLOv11</span><span class="tag">ResNet-18</span><span class="tag">Roboflow</span><span class="tag">UCF101</span>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Fine-tuned ResNet-18 on the UCF101 dataset alongside custom-annotated YOLOv11 tracking layers to process multi-action campus security classification smoothly at 30+ FPS.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Publications Section -->
+        <section id="publications">
+            <h2>Publications</h2>
+            <div class="card-list">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Uncertainty-Aware Cross-Modal Attention for Breast Cancer Image Classification</div>
+                            <div class="card-org">MICCAI DeepBreath 2025</div>
+                        </div>
+                        <a href="https://www.researchgate.net/publication/395809589_Uncertainty-Aware_Cross-Modal_Attention_for_Breast_Cancer_Classification_in_Ultrasound_Imaging" target="_blank" class="inline-link"><i class="fas fa-file-pdf"></i> ResearchGate</a>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Proposed an architecture dynamically fusing ultrasound imagery (ResNet-34 image backbone) and clinical text records through a Clinical Knowledge Gate to enhance deep-learning-based multimodal diagnostic image classification frameworks.</li>
+                            <li>Utilized an uncertainty-guided attention network optimized via an adaptive focal loss with InfoNCE contrastive alignment to extract robust cross-modal correlations and mitigate false negatives.</li>
+                            <li>Validated performance on the Breast-Lesions-USG dataset, extracting 150+ radiomics features to achieve 90% accuracy, 93% precision, and 98% recall.</li>
+                        </ul>
+                        <div class="metrics-bar">
+                            90% Accuracy | 93% Precision | 98% Recall
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section>
+            <h2>Awards & Achievements</h2>
+            <div class="card-list">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Smart India Hackathon (SIH) National Finalist</div>
+                            <div class="card-org">Team Lead & AI Developer</div>
+                        </div>
+                        <div class="card-date">Dec. 2024 -- Dec. 2025</div>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Ranked in the Top 1% nationwide for consecutive cycles: SIH 2024 (women's safety CCTV analytics system with 92% threat detection accuracy) and SIH 2025 (offline-first React Native app with a textbook-to-quiz RAG pipeline).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Skills Section -->
+        <section id="skills">
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                
+                <div class="skill-category">
+                    <h3><i class="fas fa-code"></i> Core Frameworks & Languages</h3>
+                    <div class="skill-list">
+                        <span class="skill-item">Python</span>
+                        <span class="skill-item">PyTorch</span>
+                        <span class="skill-item">TensorFlow</span>
+                        <span class="skill-item">OpenCV</span>
+                        <span class="skill-item">Scikit-learn</span>
+                        <span class="skill-item">FastAPI</span>
+                        <span class="skill-item">Flask</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-brain"></i> AI/ML Specializations</h3>
+                    <div class="skill-list">
+                        <span class="skill-item">Multimodal Deep Learning</span>
+                        <span class="skill-item">Medical Image Analysis</span>
+                        <span class="skill-item">Computer Vision</span>
+                        <span class="skill-item">Object Tracking</span>
+                        <span class="skill-item">Segmentation</span>
+                        <span class="skill-item">YOLOv8 & YOLOv11</span>
+                        <span class="skill-item">LLMs & RAG Systems</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-tools"></i> Tools & Environment</h3>
+                    <div class="skill-list">
+                        <span class="skill-item">Git / GitHub</span>
+                        <span class="skill-item">Linux</span>
+                        <span class="skill-item">Roboflow</span>
+                        <span class="skill-item">MediaPipe</span>
+                        <span class="skill-item">Ollama</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                    <div class="skill-list">
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">
+                            <strong>Future Institute of Technology</strong><br>
+                            B.Tech in Computer Science and Engineering<br>
+                            <span style="font-size: 0.8rem;">Aug. 2022 -- July 2026 | Kolkata, India</span>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <h2>Get In Touch</h2>
+            <div class="contact-box">
+                <p>I am actively seeking opportunities in AI/ML research, computer vision, and medical AI architecture. Let's build something meaningful together.</p>
+                <div class="contact-meta">
+                    <span><i class="fas fa-envelope" style="color: var(--accent);"></i> daschandisha@gmail.com</span>
+                    <span><i class="fas fa-map-marker-alt" style="color: var(--accent);"></i> Kolkata, West Bengal, India</span>
+                </div>
+            </div>
+        </section>
+
+    </div>
 
 </body>
 </html>
